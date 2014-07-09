@@ -40,12 +40,12 @@ class User extends \Eloquent implements UserInterface, RemindableInterface
      * The database table used by the model.
      * @var string
      */
-    protected $table = 'users';
+    protected $table = 't4kglo_users';
     
     /**
      * Enable model soft deleting functionality.
      */
-    use SoftDeletingTrait;
+    use \SoftDeletingTrait;
 
     /**
      * The attributes excluded from the model's JSON form.

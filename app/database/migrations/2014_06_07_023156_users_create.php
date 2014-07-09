@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateUsers extends Migration {
+class UsersCreate extends Migration {
 
 	/**
 	 * Run the migrations.
@@ -12,7 +12,7 @@ class CreateUsers extends Migration {
 	 */
 	public function up()
 	{
-		Schema::table('users', function(Blueprint $table)
+		Schema::table('t4kglo_users', function(Blueprint $table)
 		{
 			// Create table
 			$table->create();
@@ -49,7 +49,7 @@ class CreateUsers extends Migration {
 	 */
 	public function down()
 	{
-		Schema::table('users', function(Blueprint $table)
+		Schema::table('t4kglo_users', function(Blueprint $table)
 		{
 			// Drop table
 			$table->drop();
