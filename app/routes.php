@@ -44,4 +44,19 @@ Route::group(array('before' => 'auth'), function()
      * @namespace T4KControllers\Users
      */
     
+    /**
+     * Module Nouvelles
+     * @namespace T4KControllers\Nouvelles
+     */
+    Route::group(array('prefix' => 'nouvelles'), function()
+    {
+        Route::any('/',                     array('as' => 'portal.nouvelles.index',     'uses' => 'T4KControllers\Nouvelles\NouvellesController@index'));
+        Route::any('afficher/{id}',         array('as' => 'portal.nouvelles.view',      'uses' => 'T4KControllers\Nouvelles\NouvellesController@view'));
+        Route::any('ajouter',               array('as' => 'portal.nouvelles.create',    'uses' => 'T4KControllers\Nouvelles\NouvellesController@create'));
+        Route::any('ajouter/save',          array('as' => 'portal.nouvelles.store',     'uses' => 'T4KControllers\Nouvelles\NouvellesController@store'));  
+        Route::any('modifier/{id}',         array('as' => 'portal.nouvelles.edit',      'uses' => 'T4KControllers\Nouvelles\NouvellesController@edit'));
+        Route::any('modifier/save/{id}',    array('as' => 'portal.nouvelles.update',    'uses' => 'T4KControllers\Nouvelles\NouvellesController@update'));
+        Route::any('supprimer/{id}',        array('as' => 'portal.nouvelles.destroy',   'uses' => 'T4KControllers\Nouvelles\NouvellesController@destroy'));
+    });
+    
 });
