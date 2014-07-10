@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Session;
 
 /**
  * T4KControllers\Nouvelles\NouvellesController class
@@ -105,7 +106,7 @@ class NouvellesController extends \BaseController {
 	    if ($validator->fails())
 	    {
 	        // Throw error and redirect to previous screen
-	        return Redirect::route('admin.nouvelles.create')->withErrors($validator)->withInput();
+	        return Redirect::route('portal.nouvelles.create')->withErrors($validator)->withInput();
 	    }
 	    else
 	    {
@@ -119,7 +120,7 @@ class NouvellesController extends \BaseController {
 	
 	        // Redirect to view screen with success message
 	        Session::flash('store', true);
-	        return Redirect::route('admin.nouvelles.view', $article->id);
+	        return Redirect::route('portal.nouvelles.view', $article->id);
 	    }
 	}
 	
@@ -190,7 +191,7 @@ class NouvellesController extends \BaseController {
 	
 	    // Redirect to view screen with success message
 	    Session::flash('destroy', true);
-	    return Redirect::route('admin.nouvelles.index');
+	    return Redirect::route('portal.nouvelles.index');
 	}
 	
 	/**
@@ -206,7 +207,7 @@ class NouvellesController extends \BaseController {
 	    );
 	    
 	    // Redirect to Dashboard
-	    return Redirect::route('admin.nouvelles.index', $data);
+	    return Redirect::route('portal.nouvelles.index', $data);
 	}
 
 }

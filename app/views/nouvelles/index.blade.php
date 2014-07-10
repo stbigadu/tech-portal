@@ -6,15 +6,15 @@
         
         {{-- HTML Header Section --}}
         @section('title')
-            Tableau de bord
+            Nouvelles
         @stop
         
         @section('stylesheets')
-           @parent
+            @parent
         @stop
         
         @section('scripts_header')
-           @parent
+            @parent
         @stop
         
     @stop
@@ -38,13 +38,13 @@
                     
                         <?php if (Auth::user()->is_admin) : ?>
                         <div class="btn-group">
-                            <a href="<?php echo route('portal.nouvelles.create'); ?>" class="btn btn-default"><i class="fa fa-plus fa-fw"></i> Ajouter une nouvelle</a>
+                            <a href="<?php echo route('portal.nouvelles.create', array('page' => Input::get('page'))); ?>" class="btn btn-default"><i class="fa fa-plus fa-fw"></i> Ajouter une nouvelle</a>
                         </div>
                         <?php endif; ?>
                         
                         <?php if (isset($article) && Auth::user()->is_admin) : ?>
                         <div class="btn-group">
-                            <a href="<?php echo route('portal.nouvelles.edit'); ?>" class="btn btn-default"><i class="fa fa-pencil fa-fw"></i> Modifier la nouvelle</a>
+                            <a href="<?php echo route('portal.nouvelles.edit', array($article->id, 'page' => Input::get('page'))); ?>" class="btn btn-default"><i class="fa fa-pencil fa-fw"></i> Modifier la nouvelle</a>
                         </div>
                         <div class="btn-group">
                             <button class="btn btn-default" data-toggle="modal" data-target="#modal-destroy-<?php echo $article->id; ?>"><i class="fa fa-trash-o fa-fw"></i> Supprimer la nouvelle</button>
@@ -62,7 +62,7 @@
                                                 <i class="fa fa-bullhorn fa-fw fa-3x pull-left"></i>
                                                 <div style="margin-left: 70px">
                                                     <h4 style="margin-top: 0"><?php echo strip_tags($article->title); ?></h4>
-                                                    Le <strong><?php echo mb_strtolower(strftime('%A %e %B %Y, à %H h %M', strtotime($article->datetime))); ?></strong>.<br />
+                                                    Le <strong><?php echo mb_strtolower(strftime('%A %e %B %Y, à %H h %M', strtotime($article->datetime))); ?></strong><br />
                                                     Par <?php echo $article->user->full_name; ?> (<i class="fa fa-envelope-o fa-fw"></i> <?php echo HTML::mailto($article->user->email); ?>)
                                                 </div>
                                             </div>
@@ -96,7 +96,7 @@
                     <div class="panel panel-default">
                         <div class="list-group">
                             <?php foreach ($articles as $a) : ?>
-                            <a href="<?php echo route('portal.nouvelles.view', array($a->id, 'page' => Input::get('page'))); ?>" class="list-group-item<?php echo (@$article->id == $a->id) ? ' active' : ''; ?>">
+                            <a href="<?php echo route('portal.nouvelles.view', array($a->id, 'page' => Input::get('page'))); ?>" class="list-group-item<?php echo (@$article->id == $a->id) ? ' list-group-item-warning' : ''; ?>">
                                 <small><small><p class="list-group-item-text"><?php echo ($a->datetime == NULL) ? 'Aucune date.' : 'Le '.mb_strtolower(strftime('%A %e %B %Y', strtotime($a->datetime))); ?></p></small></small>
                                 <p class="list-group-item-heading"><strong><?php echo strip_tags($a->title); ?></strong></p>
                                 <small><p class="list-group-item-text"><?php echo T4KHelpers::trunc_string(strip_tags($a->content), 100); ?></p></small>
@@ -108,10 +108,42 @@
                 
                 <?php if ($currentRoute == 'portal.nouvelles.index') : ?>
                 <div class="col-lg-8 col-md-8 col-sm-6 hidden-xs">
-                    <div class="alert bg-warning text-center text-muted">Veuillez choisir une nouvelle.</div>
+                
+                    <?php if (Session::has('destroy') && Session::get('destroy') == true) : ?>
+                        <div class="alert alert-success alert-dismissable fade in">
+                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                            <i class="fa fa-check-circle fa-fw fa-3x pull-left"></i>
+                            <div style="margin-left: 70px">
+                                <h4>Nouvelle supprimée</h4> La nouvelle &laquo; <strong><?php echo strip_tags(Session::get('object_name')); ?></strong> &raquo; a été supprimée avec succès.
+                            </div>
+                        </div>
+                    <?php endif; ?>
+                    
+                    <div class="alert alert-warning text-center">Veuillez choisir une nouvelle.</div>
                 </div>
                 <?php else : ?>
                 <div class="col-lg-8 col-md-8 col-sm-6 col-xs-12">
+                
+                    <?php if (Session::has('store') && Session::get('store') == true) : ?>
+                        <div class="alert alert-success alert-dismissable fade in">
+                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                            <i class="fa fa-check-circle fa-fw fa-3x pull-left"></i>
+                            <div style="margin-left: 70px">
+                                <h4>Nouvelle créée</h4> La nouvelle &laquo; <strong><?php echo strip_tags($article->title); ?></strong> &raquo; a été créée avec succès.
+                            </div>
+                        </div>
+                    <?php endif; ?>
+                    
+                    <?php if (Session::has('update') && Session::get('update') == true) : ?>
+                        <div class="alert alert-success alert-dismissable fade in">
+                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                            <i class="fa fa-check-circle fa-fw fa-3x pull-left"></i>
+                            <div style="margin-left: 70px">
+                                <h4>Nouvelle modifiée</h4> La nouvelle &laquo; <strong><?php echo strip_tags($article->title); ?></strong> &raquo; a été modifiée avec succès.
+                            </div>
+                        </div>
+                    <?php endif; ?>
+                
                     <small>
                     <p class="text-muted">
                         <?php echo ($article->datetime == NULL) ? 'Aucune date.' : 'Le '.mb_strtolower(strftime('%A %e %B %Y', strtotime($article->datetime))); ?><br />

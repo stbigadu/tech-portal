@@ -27,6 +27,9 @@ body {
 .btn-toolbar {
 	margin-bottom: 20px;
 }
+dd {
+	margin-bottom: 15px;
+}
 
 /*
  * T4K Styles
@@ -52,4 +55,9 @@ body {
 .btn-noborder {
 	border: none;
 	background: none;
+}
+.panel-tabs {
+	border-top: none;
+	border-top-left-radius: 0;
+	border-top-right-radius: 0;
 }

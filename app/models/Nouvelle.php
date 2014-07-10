@@ -28,13 +28,7 @@ class Nouvelle extends \Eloquent
      * @var array
      */
     public static $rules = array(
-            'datetime'         => 'required|date',
-            'date_activation'  => 'date',
-            'date_expiration'  => 'date',
-            'external_link'    => 'url',
-            'title_FR'         => 'required',
-            'title_EN'         => 'required',
-            'groupe'           => 'required'
+        'title'             => 'required'
     );
     
     /**
@@ -42,12 +36,7 @@ class Nouvelle extends \Eloquent
      * @var array
      */
     public static $messages = array(
-            'datetime.required'    => 'La date de la nouvelle est requise.',
-            'title_FR.required'    => 'Le titre de la nouvelle en français est requis.',
-            'title_EN.required'    => 'Le titre de la nouvelle en anglais est requis.',
-            'groupe.required'      => 'Au moins un thème de recherche est requis.',
-            'date'                 => 'Le ou les dates sont mal indiquées.',
-            'external_link.url'    => 'Le lien externe est mal indiqué.'
+        'title.required'    => 'Le titre de la nouvelle est requise.',
     );
     
     /**

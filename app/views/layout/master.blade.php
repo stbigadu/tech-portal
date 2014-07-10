@@ -20,6 +20,9 @@
     @show
     
     @section('scripts_header')
+        <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+        {{ HTML::script('/assets/jquery/jquery-2.1.1.min.js'); }}
+        {{ HTML::script('/assets/bootstrap/js/bootstrap.min.js'); }}
     @show
     
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -146,10 +149,6 @@
         </div>
     </div>
     @show
-
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-	{{ HTML::script('/assets/jquery/jquery-2.1.1.min.js'); }}
-	{{ HTML::script('/assets/bootstrap/js/bootstrap.min.js'); }}
     	
 	@section('scripts_eof')
 	@show
