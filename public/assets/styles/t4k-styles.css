@@ -10,32 +10,46 @@ body {
 /*
  * Global add-ons
  */
- 
 .sub-header {
 	padding-bottom: 10px;
 	border-bottom: 1px solid #eee;
 }
-
 .no-wrap
 {
 	white-space: nowrap;
 }
+.list-group-item-text {
+  color: #333;
+}
+.pagination {
+	margin-top: 0;
+}
+.btn-toolbar {
+	margin-bottom: 20px;
+}
 
+/*
+ * T4K Styles
+ */
 .text-t4k, a {
 	color: #DFBF07;
 }
-
 .text-t4k:hover, .text-t4k:focus, .text-t4k:active, a:hover, a:focus, a:active {
 	color: #ECCA07;
 }
-
 .label-t4k, .label-t4k a, .btn-t4k, .btn-t4k a {
 	background: #F7ED15;
 	color: #221e1f;
 	border-color: #E0D612;
 }
-
 .btn-t4k:hover, .btn-t4k:focus, .btn-t4k:active, .btn-t4k.active {
 	background: #F7DA15;
 	border-color: #E0D612;
+}
+.btn-noborder:hover, .btn-noborder:focus, .btn-noborder:active, .btn-noborder.active, .open .dropdown-toggle.btn-noborder {
+	border: none;
+}
+.btn-noborder {
+	border: none;
+	background: none;
 }

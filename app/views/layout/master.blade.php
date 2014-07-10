@@ -43,7 +43,7 @@
             </div>
             <?php if (Auth::check()) : ?>
             <ul class="nav navbar-nav">
-                <li><a href="#"><i class="fa fa-bullhorn fa-fw"></i> Annonces</a></li>
+                <li><a href="<?php echo route('portal.nouvelles.index'); ?>"><i class="fa fa-bullhorn fa-fw"></i> Nouvelles</a></li>
                 <li><a href="#"><i class="fa fa-calendar fa-fw"></i> Calendrier</a></li>
                 <li><a href="#"><i class="fa fa-clock-o fa-fw"></i> Horaire</a></li>
                 <li><a href="#"><i class="fa fa-users fa-fw"></i> Équipe</a></li>

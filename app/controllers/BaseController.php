@@ -19,7 +19,7 @@ class BaseController extends Controller {
      * GLOBAL / Number of items per page
      * @var int
      */
-    protected $ItemsPerPage = 50;
+    protected $ItemsPerPage = 5;
 
 	/**
 	 * Setup the layout used by the controller.

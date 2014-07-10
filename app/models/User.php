@@ -107,5 +107,24 @@ class User extends \Eloquent implements UserInterface, RemindableInterface
     {
         return $this->email;
     }
+    
+    /**
+     * Accessor: user's full name
+     * @param Collection Object $value
+     * @return string
+     */
+    public function getFullNameAttribute($value)
+    {
+        return $this->first_name.' '.$this->last_name;
+    }
+    
+    /**
+     * Relationship to Nouvelle model.
+     * @return array
+     */
+    public function nouvelles()
+    {
+        return $this->hasMany('\T4KModels\Nouvelle');
+    }
 
 }
