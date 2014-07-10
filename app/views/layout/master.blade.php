@@ -38,44 +38,80 @@
     
     <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
         <div class="container-fluid">
+        
             <div class="navbar-header">
-                <a href="#" class="navbar-brand">Tech Portail</a>
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#t4k-navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a href="<?php echo route('portal.dashboard.index'); ?>" class="navbar-brand">Tech Portail</a>
             </div>
-            <?php if (Auth::check()) : ?>
-            <ul class="nav navbar-nav">
-                <li><a href="<?php echo route('portal.nouvelles.index'); ?>"><i class="fa fa-bullhorn fa-fw"></i> Nouvelles</a></li>
-                <li><a href="#"><i class="fa fa-calendar fa-fw"></i> Calendrier</a></li>
-                <li><a href="#"><i class="fa fa-clock-o fa-fw"></i> Horaire</a></li>
-                <li><a href="#"><i class="fa fa-users fa-fw"></i> Équipe</a></li>
-            </ul>
-            <?php endif; ?>
-            <ul class="nav navbar-nav navbar-right">
+            
+            <div class="collapse navbar-collapse" id="t4k-navbar">
+            
                 <?php if (Auth::check()) : ?>
-                <li><p class="navbar-text">Bonjour, <strong><?php echo Auth::user()->first_name; ?></strong>!</p></li>
-                <li><a href="#"><i class="fa fa-user fa-fw"></i> Mon compte</a></li>
-                <li><a href="<?php echo route('portal.users.logout'); ?>"><i class="fa fa-power-off fa-fw"></i> Se déconnecter</a></li>
+                <ul class="nav navbar-nav">
+                    <li<?php echo (@$activeScreen == 'NouvellesIndex') ? ' class="active"' : ''; ?>><a href="<?php echo route('portal.nouvelles.index'); ?>"><i class="fa fa-bullhorn fa-fw"></i> Nouvelles</a></li>
+                    <li><a href="#"><i class="fa fa-calendar fa-fw"></i> Calendrier</a></li>
+                    <li><a href="#"><i class="fa fa-clock-o fa-fw"></i> Horaire</a></li>
+                    <li><a href="#"><i class="fa fa-users fa-fw"></i> Équipe</a></li>
+                </ul>
                 <?php endif; ?>
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-th fa-fw"></i> <i class="fa fa-caret-down fa-fw"></i></a>
-                    <ul class="dropdown-menu">
-                        <li class="dropdown-header">Applications pour élèves et mentors</li>
-                        <li><a href="#"><i class="fa fa-cube fa-fw"></i> Tech Portail</a></li>
-                        <li class="disabled"><a href="#"><i class="fa fa-briefcase fa-fw"></i> Tech Projets</a></li>
-                        <li class="disabled"><a href="#"><i class="fa fa-automobile fa-fw"></i> Tech Parts</a></li>
-                        <li class="disabled"><a href="#"><i class="fa fa-bug fa-fw"></i> Tech Incidents</a></li>
-                        <li class="disabled"><a href="#"><i class="fa fa-fw"></i> Tech Wiki</a></li>
-                        <li><a href="https://my.usfirst.org/stims/" target="_blank"><i class="fa fa-fw"></i> STIMS</a></li>
-                        <li class="divider"></li>
-                        <li class="dropdown-header">Platforme</li>
-                        <li><a href="http://academy.team3990.com" target="_blank"><i class="fa fa-book fa-fw"></i> Tech Académie</a></li>
-                        <li class="disabled"><a href="#"><i class="fa fa-flask fa-fw"></i> Tech Labo</a></li>
-                        <li class="divider"></li>
-                        <li class="dropdown-header no-wrap">Applications pour mentors et apprentis mentors</li>
-                        <li><a href="http://courriel.team3990.com" target="_blank"><i class="fa fa-envelope fa-fw"></i> Tech Courriel</a></li>
-                        <li><a href="https://my.usfirst.org/frc/tims/site.lasso" target="_blank"><i class="fa fa-fw"></i> TIMS</a></li>
-                    </ul>
-                </li>
-            </ul>
+                
+                <ul class="nav navbar-nav navbar-right">
+                    <?php if (Auth::check()) : ?>
+                    <li class="hidden-xs"><p class="navbar-text">Bonjour, <strong><?php echo Auth::user()->first_name; ?></strong>!</p></li>
+                    <li><a href="#"><i class="fa fa-user fa-fw"></i> Mon compte</a></li>
+                    <li><a href="<?php echo route('portal.users.logout'); ?>"><i class="fa fa-power-off fa-fw"></i> Se déconnecter</a></li>
+                    <?php endif; ?>
+                    <li class="dropdown hidden-xs">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-th fa-fw"></i> <i class="fa fa-caret-down fa-fw"></i></a>
+                        <ul class="dropdown-menu">
+                            <li class="dropdown-header">Applications pour élèves et mentors</li>
+                            <li><a href="#"><i class="fa fa-cube fa-fw"></i> Tech Portail</a></li>
+                            <li class="disabled"><a href="#"><i class="fa fa-briefcase fa-fw"></i> Tech Projets</a></li>
+                            <li class="disabled"><a href="#"><i class="fa fa-automobile fa-fw"></i> Tech Parts</a></li>
+                            <li class="disabled"><a href="#"><i class="fa fa-bug fa-fw"></i> Tech Incidents</a></li>
+                            <li class="disabled"><a href="#"><i class="fa fa-fw"></i> Tech Wiki</a></li>
+                            <li><a href="https://my.usfirst.org/stims/" target="_blank"><i class="fa fa-fw"></i> STIMS</a></li>
+                            <li class="divider"></li>
+                            <li class="dropdown-header">Platforme</li>
+                            <li><a href="http://academy.team3990.com" target="_blank"><i class="fa fa-book fa-fw"></i> Tech Académie</a></li>
+                            <li class="disabled"><a href="#"><i class="fa fa-flask fa-fw"></i> Tech Labo</a></li>
+                            <li class="divider"></li>
+                            <li class="dropdown-header no-wrap">Applications pour mentors et apprentis mentors</li>
+                            <li><a href="http://courriel.team3990.com" target="_blank"><i class="fa fa-envelope fa-fw"></i> Tech Courriel</a></li>
+                            <li><a href="https://my.usfirst.org/frc/tims/site.lasso" target="_blank"><i class="fa fa-fw"></i> TIMS</a></li>
+                        </ul>
+                    </li>
+                </ul>
+                
+                <ul class="nav navbar-nav navbar-right visible-xs">
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-th fa-fw"></i> Autres applications <i class="fa fa-caret-down fa-fw"></i></a>
+                        <ul class="dropdown-menu">
+                            <li class="dropdown-header">Applications pour élèves et mentors</li>
+                            <li><a href="#"><i class="fa fa-cube fa-fw"></i> Tech Portail</a></li>
+                            <li class="disabled"><a href="#"><i class="fa fa-briefcase fa-fw"></i> Tech Projets</a></li>
+                            <li class="disabled"><a href="#"><i class="fa fa-automobile fa-fw"></i> Tech Parts</a></li>
+                            <li class="disabled"><a href="#"><i class="fa fa-bug fa-fw"></i> Tech Incidents</a></li>
+                            <li class="disabled"><a href="#"><i class="fa fa-fw"></i> Tech Wiki</a></li>
+                            <li><a href="https://my.usfirst.org/stims/" target="_blank"><i class="fa fa-fw"></i> STIMS</a></li>
+                            <li class="divider"></li>
+                            <li class="dropdown-header">Platforme</li>
+                            <li><a href="http://academy.team3990.com" target="_blank"><i class="fa fa-book fa-fw"></i> Tech Académie</a></li>
+                            <li class="disabled"><a href="#"><i class="fa fa-flask fa-fw"></i> Tech Labo</a></li>
+                            <li class="divider"></li>
+                            <li class="dropdown-header no-wrap">Applications pour mentors et apprentis mentors</li>
+                            <li><a href="http://courriel.team3990.com" target="_blank"><i class="fa fa-envelope fa-fw"></i> Tech Courriel</a></li>
+                            <li><a href="https://my.usfirst.org/frc/tims/site.lasso" target="_blank"><i class="fa fa-fw"></i> TIMS</a></li>
+                        </ul>
+                    </li>
+                </ul>
+                
+            </div>
         </div>
     </div>
     
