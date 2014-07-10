@@ -35,40 +35,96 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="btn-toolbar" role="toolbar">
+                    
+                        <?php if (Auth::user()->is_admin) : ?>
                         <div class="btn-group">
-                            <?php if (Auth::user()->is_admin) : ?>
                             <a href="<?php echo route('portal.nouvelles.create'); ?>" class="btn btn-default"><i class="fa fa-plus fa-fw"></i> Ajouter une nouvelle</a>
-                            <?php endif; ?>
+                        </div>
+                        <?php endif; ?>
+                        
+                        <?php if (isset($article) && Auth::user()->is_admin) : ?>
+                        <div class="btn-group">
+                            <a href="<?php echo route('portal.nouvelles.edit'); ?>" class="btn btn-default"><i class="fa fa-pencil fa-fw"></i> Modifier la nouvelle</a>
                         </div>
                         <div class="btn-group">
+                            <button class="btn btn-default" data-toggle="modal" data-target="#modal-destroy-<?php echo $article->id; ?>"><i class="fa fa-trash-o fa-fw"></i> Supprimer la nouvelle</button>
+                        </div>
+                        <div class="modal fade" id="modal-destroy-<?php echo $article->id; ?>" tabindex="-1" role="dialog">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                        <h4 class="modal-title" id="myModalLabel">Supprimer une nouvelle</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="panel panel-default">
+                                            <div class="panel-body">
+                                                <i class="fa fa-bullhorn fa-fw fa-3x pull-left"></i>
+                                                <div style="margin-left: 70px">
+                                                    <h4 style="margin-top: 0"><?php echo strip_tags($article->title); ?></h4>
+                                                    Le <strong><?php echo mb_strtolower(strftime('%A %e %B %Y, à %H h %M', strtotime($article->datetime))); ?></strong>.<br />
+                                                    Par <?php echo $article->user->full_name; ?> (<i class="fa fa-envelope-o fa-fw"></i> <?php echo HTML::mailto($article->user->email); ?>)
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="text-danger text-center"><strong>Êtes-vous sûr de vouloir supprimer cette nouvelle?</strong></div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <a href="<?php echo route('portal.nouvelles.destroy', $article->id); ?>" class="btn btn-danger"><i class="fa fa-trash-o fa-fw"></i> Supprimer</a>
+                                        <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-times-circle fa-fw"></i> Annuler</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <?php endif; ?>
+                        
+                        <div class="btn-group pull-right">
                             <button class="btn btn-noborder disabled">
                                 <?php echo $ItemsCount; ?> nouvelle(s) au total.
                                 <i class="fa fa-files-o fa-fw"></i> Page(s) : 
                             </button>
                             <?php echo $articles->links(); ?>
                         </div>
+                        
                     </div>
                 </div>
             </div>
             
             <div class="row">
-                <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                
+                <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12<?php echo ($currentRoute == 'portal.nouvelles.view') ? ' hidden-xs' : ''; ?>">
                     <div class="panel panel-default">
                         <div class="list-group">
-                            <?php foreach ($articles as $article) : ?>
-                            <a href="#" class="list-group-item">
-                                <small><small><p class="list-group-item-text"><?php echo ($article->datetime == NULL) ? 'Aucune date.' : 'Le '.mb_strtolower(strftime('%A %e %B %Y', strtotime($article->datetime))); ?></p></small></small>
-                                <p class="list-group-item-heading"><strong><?php echo strip_tags($article->title); ?></strong></p>
-                                <small><p class="list-group-item-text"><?php echo T4KHelpers::trunc_string(strip_tags($article->content), 100); ?></p></small>
+                            <?php foreach ($articles as $a) : ?>
+                            <a href="<?php echo route('portal.nouvelles.view', array($a->id, 'page' => Input::get('page'))); ?>" class="list-group-item<?php echo (@$article->id == $a->id) ? ' active' : ''; ?>">
+                                <small><small><p class="list-group-item-text"><?php echo ($a->datetime == NULL) ? 'Aucune date.' : 'Le '.mb_strtolower(strftime('%A %e %B %Y', strtotime($a->datetime))); ?></p></small></small>
+                                <p class="list-group-item-heading"><strong><?php echo strip_tags($a->title); ?></strong></p>
+                                <small><p class="list-group-item-text"><?php echo T4KHelpers::trunc_string(strip_tags($a->content), 100); ?></p></small>
                             </a>
                             <?php endforeach; ?>
                         </div>
                     </div>
                 </div>
                 
-                <div class="col-lg-8 col-md-8 col-sm-6 col-xs-12">
-                    <div class="alert alert-warning text-center">Veuillez choisir une nouvelle.</div>
+                <?php if ($currentRoute == 'portal.nouvelles.index') : ?>
+                <div class="col-lg-8 col-md-8 col-sm-6 hidden-xs">
+                    <div class="alert bg-warning text-center text-muted">Veuillez choisir une nouvelle.</div>
                 </div>
+                <?php else : ?>
+                <div class="col-lg-8 col-md-8 col-sm-6 col-xs-12">
+                    <small>
+                    <p class="text-muted">
+                        <?php echo ($article->datetime == NULL) ? 'Aucune date.' : 'Le '.mb_strtolower(strftime('%A %e %B %Y', strtotime($article->datetime))); ?><br />
+                        Par <?php echo $article->user->full_name; ?> (<i class="fa fa-envelope-o fa-fw"></i> <?php echo HTML::mailto($article->user->email); ?>)
+                    </p>
+                    </small>
+                    
+                    <div class="page-header" style="margin-top: 0; padding-top: 0">
+                        <h1 style="margin-top: 0; padding-top: 0"><?php echo $article->title; ?></h1>
+                    </div>
+                    <?php echo $article->content; ?>
+                </div>
+                <?php endif; ?>
             </div>
         @stop
         

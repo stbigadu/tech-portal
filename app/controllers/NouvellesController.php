@@ -41,9 +41,33 @@ class NouvellesController extends \BaseController {
 	    $data = array(
             'articles'      => $articles,
             'ItemsCount'    => \T4KModels\Nouvelle::count(),
-            'activeScreen'  => 'DashboardIndex'
+            'currentRoute'  => \Route::currentRouteName(),
+            'activeScreen'  => 'NouvellesIndex'
 	    );
 	    
+	    // Render view
+	    $this->layout->content = \View::make('nouvelles.index', $data);
+	}
+	
+	public function view($id)
+	{
+	    // Retrieve all news
+	    $articles = \T4KModels\Nouvelle::
+    	      orderBy('datetime', 'desc')
+    	    ->paginate($this->ItemsPerPage);
+	    
+	    // Retrieve the news item with its id
+	    $article = \T4KModels\Nouvelle::find($id);
+	     
+	    // Array of data to send to view
+	    $data = array(
+            'article'       => $article,
+            'articles'      => $articles,
+            'ItemsCount'    => \T4KModels\Nouvelle::count(),
+            'currentRoute'  => \Route::currentRouteName(),
+            'activeScreen'  => 'NouvellesIndex'
+	    );
+	     
 	    // Render view
 	    $this->layout->content = \View::make('nouvelles.index', $data);
 	}
