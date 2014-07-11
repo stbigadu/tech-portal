@@ -41,7 +41,7 @@ class Nouvelle extends \Eloquent
     
     /**
      * Relationship to User model.
-     * @return array
+     * @return Eloquent Scope
      */
     public function user()
     {
