@@ -1,12 +1,5 @@
 <?php
 
-/**
- * T4KControllers\Users\UsersController class
- * @author minhnhatbui
- * @copyright 2014 Équipe Team 3990: Tech for Kids (Collège Regina Assumpta, Montréal, QC)
- * @abstract View Controller managing users.
- */
-
 namespace T4KControllers\Users;
 
 use Illuminate\Support\Facades\Auth;
@@ -15,7 +8,16 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
 
-class UsersController extends \BaseController { 
+/**
+ * T4KControllers\Users\UsersController class
+ * @author      minhnhatbui
+ * @copyright   2014 Équipe Team 3990: Tech for Kids (Collège Regina Assumpta, Montréal, QC)
+ * @abstract    View Controller managing users login, logout, and users section on the portal, i.e.
+ *              user's profile, list of users, etc.
+ */
+
+class UsersController extends \BaseController 
+{ 
     
     /**
      * Constructor
@@ -60,21 +62,23 @@ class UsersController extends \BaseController {
 	}
 	
 	/**
-	 * Show the view displaying all users from the admin panel.
+	 * Show the view displaying all users.
 	 * @return View Response
 	 */
-	public function users()
+	public function index()
 	{
 	    // Retrieve all news
-	    $users = \T4KModels\User::
-	         orderBy('last_name', 'asc')
-	       ->orderBy('first_name', 'asc')
-	       ->paginate($this->ItemsPerPage);
+        $users = \T4KModels\User::
+              orderBy('last_name', 'asc')
+            ->orderBy('first_name', 'asc')
+            ->get();
 	    	    
 	    // Array of data to send to view
 	    $data = array(
 	            'users'            => $users,
-	            'TotalCount'       => \T4KModels\User::count(),
+	            'UserRole'         => $this->UserRole,
+	            'ItemsCount'       => \T4KModels\User::count(),
+	            'currentRoute'     => \Route::currentRouteName(),
 	            'activeScreen'     => 'UsersIndex'
 	    );
 	    
@@ -83,14 +87,15 @@ class UsersController extends \BaseController {
 	}
 	
 	/**
-	 * Show the user's dashboard screen if user is logged in.
+	 * Show the user's profile screen if user is logged in.
 	 * @return View Response
 	 */
 	public function profile()
 	{
 	    // Array of data to send to view
 	    $data = array(
-	            'activeScreen'     => 'MonCompteIndex'
+	            'currentRoute'     => \Route::currentRouteName(),
+	            'activeScreen'     => 'UsersIndex'
 	    );
 	     
 	    // Render view

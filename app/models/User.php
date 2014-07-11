@@ -1,16 +1,16 @@
 <?php
 
-/**
- * T4KModels\User class
- * @author minhnhatbui
- * @copyright 2014 Équipe Team 3990: Tech for Kids (Collège Regina Assumpta, Montréal, QC)
- * @abstract Model Controller managing users.
- */
-
 namespace T4KModels;
 
 use Illuminate\Auth\UserInterface;
 use Illuminate\Auth\Reminders\RemindableInterface;
+
+/**
+ * T4KModels\User class
+ * @author      minhnhatbui
+ * @copyright   2014 Équipe Team 3990: Tech for Kids (Collège Regina Assumpta, Montréal, QC)
+ * @abstract    Model Controller managing users. 
+ */
 
 class User extends \Eloquent implements UserInterface, RemindableInterface
 {
@@ -125,6 +125,11 @@ class User extends \Eloquent implements UserInterface, RemindableInterface
     public function nouvelles()
     {
         return $this->hasMany('\T4KModels\Nouvelle');
+    }
+    
+    public function role()
+    {
+        return $this->belongsTo('\T4KModels\UserRole', 'user_role_id', 'id');
     }
 
 }

@@ -20,6 +20,18 @@ class BaseController extends Controller {
      * @var int
      */
     protected $ItemsPerPage = 5;
+    
+    /**
+     * GLOBAL / Users Roles
+     * @var array
+     */
+    protected $UserRole = array(
+            'STUDENT'   => 1,
+            'MENTOR'    => 2,
+            'JMENTOR'   => 3,
+            'PARENT'    => 4,
+            'OTHER'     => 5
+    );
 
 	/**
 	 * Setup the layout used by the controller.

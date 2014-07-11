@@ -59,4 +59,14 @@ Route::group(array('before' => 'auth'), function()
         Route::any('supprimer/{id}',        array('as' => 'portal.nouvelles.destroy',   'uses' => 'T4KControllers\Nouvelles\NouvellesController@destroy'));
     });
     
+    /**
+     * Module Users
+     * @namespace T4KControllers\Users
+     */
+    Route::group(array('prefix' => 'users'), function()
+    {
+        Route::any('/',                     array('as' => 'portal.users.index',         'uses' => 'T4KControllers\Users\UsersController@index'));
+        Route::any('profile',               array('as' => 'portal.users.profile',       'uses' => 'T4KControllers\Users\UsersController@profile'));
+    });
+    
 });
