@@ -1,13 +1,13 @@
 <?php
 
+namespace T4KModels;
+
 /**
  * T4KModels\Nouvelle class
- * @author minhnhatbui
- * @copyright 2014 Équipe Team 3990: Tech for Kids (Collège Regina Assumpta, Montréal, QC)
- * @abstract Model Controller managing nouvelles.
+ * @author      minhnhatbui
+ * @copyright   2014 Équipe Team 3990: Tech for Kids (Collège Regina Assumpta, Montréal, QC)
+ * @abstract    Model Controller managing nouvelles.
  */
-
-namespace T4KModels;
 
 class Nouvelle extends \Eloquent
 {

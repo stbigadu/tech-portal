@@ -11,9 +11,9 @@ use Illuminate\Support\Facades\Session;
 
 /**
  * T4KControllers\Nouvelles\NouvellesController class
- * @author minhnhatbui
- * @copyright 2014 Équipe Team 3990: Tech for Kids (Collège Regina Assumpta, Montréal, QC)
- * @abstract View Controller for the Nouvelles model.
+ * @author      minhnhatbui
+ * @copyright   2014 Équipe Team 3990: Tech for Kids (Collège Regina Assumpta, Montréal, QC)
+ * @abstract    View Controller for the Nouvelles model.
  */
 
 class NouvellesController extends \BaseController { 
