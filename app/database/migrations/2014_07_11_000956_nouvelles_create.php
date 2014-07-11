@@ -14,15 +14,16 @@ class NouvellesCreate extends Migration {
 	{
 		Schema::table('t4knet_nouvelles', function(Blueprint $table)
 		{
-			// Create table
+		    // Create table
 		    $table->create();
 		     
 		    // Table schema
 		    $table->increments('id');
-		    $table->dateTime('datetime');
-		    $table->integer('user_id')->unsigned()->nullable();
 		    $table->text('title');
 		    $table->text('content');
+		    
+		    $table->dateTime('datetime');
+		    $table->integer('user_id')->unsigned()->nullable();
 		    
 		    // Indexes & FK
 		    $table->foreign('user_id')->references('id')->on('t4kglo_users');
@@ -42,7 +43,7 @@ class NouvellesCreate extends Migration {
 	{
 		Schema::table('t4knet_nouvelles', function(Blueprint $table)
 		{
-			// Table drop
+		    // Drop table
 		    $table->drop();
 		});
 	}
