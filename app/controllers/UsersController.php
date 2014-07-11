@@ -39,7 +39,7 @@ class UsersController extends \BaseController {
 	 */
 	public function connection()
 	{
-	    if (Auth::attempt(array('username' => Input::get('username'), 'password' => Input::get('password')))) 
+	    if (Auth::attempt(array('email' => Input::get('email'), 'password' => Input::get('password')))) 
 	    {
 	        return Redirect::route('portal.dashboard.index')->with('message', 'Connexion réussie.');
 	    } 
@@ -119,7 +119,7 @@ class UsersController extends \BaseController {
 	    {
 	        // Create initial admin user
 	        $user = new \T4KModels\User();
-	        $user->username = Input::get('username');
+	        $user->email = Input::get('email');
 	        $user->password = Hash::make(Input::get('password'));
 	        $user->is_first_connection = 1;
 	        $user->is_admin = 1;

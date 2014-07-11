@@ -54,7 +54,7 @@
                 
                         <div class="input-group" style="margin-bottom: 10px">
                             <span class="input-group-addon"><i class="fa fa-user fa-fw"></i></span>
-                            <input type="text" id="username" name="username" class="form-control" placeholder="Nom d'utilisateur" required autofocus />
+                            <input type="email" id="email" name="email" class="form-control" placeholder="Courriel" required autofocus />
                         </div>
                         
                         <div class="input-group">
