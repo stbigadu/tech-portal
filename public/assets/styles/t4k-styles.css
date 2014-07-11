@@ -40,14 +40,18 @@ dd {
 .text-t4k:hover, .text-t4k:focus, .text-t4k:active, a:hover, a:focus, a:active {
 	color: #ECCA07;
 }
-.label-t4k, .label-t4k a, .btn-t4k, .btn-t4k a {
+.label-t4k, .label-t4k a, .btn-t4k, .btn-t4k a, .pagination>.active>span {
 	background: #F7ED15;
 	color: #221e1f;
 	border-color: #E0D612;
 }
-.btn-t4k:hover, .btn-t4k:focus, .btn-t4k:active, .btn-t4k.active {
+.btn-t4k:hover, .btn-t4k:focus, .btn-t4k:active, .btn-t4k.active, .pagination>.active>span:hover {
 	background: #F7DA15;
 	border-color: #E0D612;
+	color: #221e1f;
+}
+.pagination>li>a, .pagination>li>a:hover, .pagination>li>a:active, .pagination>li>a:focus {
+	color: #221e1f;
 }
 .btn-noborder:hover, .btn-noborder:focus, .btn-noborder:active, .btn-noborder.active, .open .dropdown-toggle.btn-noborder {
 	border: none;
