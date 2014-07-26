@@ -1,13 +1,13 @@
 <?php
 
+namespace T4KModels;
+
 /**
  * T4KModels\Event class
  * @author      minhnhatbui
  * @copyright   2014 Équipe Team 3990: Tech for Kids (Collège Regina Assumpta, Montréal, QC)
  * @abstract    Model Controller managing events attendance.
  */
-
-namespace T4KModels;
 
 class EventPresence extends \Eloquent
 {
@@ -16,7 +16,7 @@ class EventPresence extends \Eloquent
      * The database table used by the model.
      * @var string
      */
-    protected $table = 't4knet_events';
+    protected $table = 't4knet_event_presence';
     
     /**
      * Enable model soft deleting functionality.
@@ -45,7 +45,16 @@ class EventPresence extends \Eloquent
      */
     public function event()
     {
-        return $this->belongsTo('\T4KModels\Event');
+        return $this->belongsTo('\T4KModels\Event', 'id', 'event_id');
+    }
+    
+    /**
+     * Relationship to User model.
+     * @return Eloquent Scope
+     */
+    public function user()
+    {
+        return $this->belongsTo('\T4KModels\User', 'user_id', 'id');
     }
     
 }

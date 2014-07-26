@@ -28,22 +28,33 @@ class EventsController extends \BaseController {
     }
     
     /**
-     * Display all events items.
+     * Display all current and upcoming events items.
+     * @param int $id = null
      * @return View Response
      */
-	public function index()
+	public function upcoming($id = null)
 	{
-	    // Retrieve all events items
-	    $events = \T4KModels\Event::
-	         orderBy('datetime', 'desc')
-	       ->paginate($this->ItemsPerPage);
+	    // Retrieve upcoming events items
+	    $upcoming_events = \T4KModels\Event::upcoming()->get();
+	    
+	    // Retrieve current events items
+	    $current_events = \T4KModels\Event::current()->get();
+	    
+	    // If item is select, retrieve current item
+	    $event = null;
+	    if (isset($id))
+	    {
+	        $event = \T4KModels\Event::find($id);
+	    }
 	    
 	    // Array of data to send to view
 	    $data = array(
-                'events'        => $events,
-                'ItemsCount'    => \T4KModels\Event::count(),
-                'currentRoute'  => \Route::currentRouteName(),
-                'activeScreen'  => 'EventIndex'
+                'upcoming_events'   => $upcoming_events,
+                'current_events'    => $current_events,
+                'event'             => $event,
+                'ItemsCount'        => \T4KModels\Event::count(),
+                'currentRoute'      => \Route::currentRouteName(),
+                'activeScreen'      => 'EventsIndex'
 	    );
 	    
 	    // Render view
@@ -51,26 +62,29 @@ class EventsController extends \BaseController {
 	}
 	
 	/**
-	 * View a event item.
-	 * @param int $id
+	 * Display all past events items.
+	 * @param int $id = null
+	 * @return View Response
 	 */
-	public function view($id)
-	{
-	    // Retrieve all events items
-	    $events = \T4KModels\Event::
-    	      orderBy('datetime', 'desc')
-    	    ->paginate($this->ItemsPerPage);
+	public function past($id = null)
+	{	     
+	    // Retrieve past events items
+	    $past_events = \T4KModels\Event::past()->paginate($this->ItemsPerPage*2);
 	    
-	    // Retrieve the event item with its id
-	    $event = \T4KModels\Event::find($id);
+	    // If item is select, retrieve current item
+	    $event = null;
+	    if (isset($id))
+	    {
+	        $event = \T4KModels\Event::find($id);
+	    }
 	     
 	    // Array of data to send to view
 	    $data = array(
-                'event'         => $event,
-                'events'        => $events,
-                'ItemsCount'    => \T4KModels\Event::count(),
-                'currentRoute'  => \Route::currentRouteName(),
-                'activeScreen'  => 'EventIndex'
+	            'past_events'       => $past_events,
+	            'event'             => $event,
+	            'ItemsCount'        => \T4KModels\Event::count(),
+	            'currentRoute'      => \Route::currentRouteName(),
+	            'activeScreen'      => 'EventsIndex'
 	    );
 	     
 	    // Render view
@@ -86,7 +100,7 @@ class EventsController extends \BaseController {
 	    // Array of data to send to view
 	    $data = array(
                 'currentRoute'  => \Route::currentRouteName(),
-                'activeScreen'  => 'EventIndex'
+                'activeScreen'  => 'EventsIndex'
 	    );
 	     
 	    // Render view
@@ -138,7 +152,7 @@ class EventsController extends \BaseController {
 	    $data = array(
                 'event'       => $event,
 	            'currentRoute'  => \Route::currentRouteName(),
-                'activeScreen'  => 'EventIndex'
+                'activeScreen'  => 'EventsIndex'
 	    );
 	     
 	    // Render view
@@ -203,7 +217,7 @@ class EventsController extends \BaseController {
 	    // Array of data to send to view
 	    $data = array(
                 'currentRoute'  => \Route::currentRouteName(),
-                'activeScreen'  => 'EventIndex'
+                'activeScreen'  => 'EventsIndex'
 	    );
 	    
 	    // Redirect to Dashboard

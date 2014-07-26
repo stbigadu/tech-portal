@@ -1,13 +1,13 @@
 <?php
 
+namespace T4KModels;
+
 /**
  * T4KModels\Event class
  * @author      minhnhatbui
  * @copyright   2014 Équipe Team 3990: Tech for Kids (Collège Regina Assumpta, Montréal, QC)
  * @abstract    Model Controller managing events.
  */
-
-namespace T4KModels;
 
 class Event extends \Eloquent
 {
@@ -40,6 +40,33 @@ class Event extends \Eloquent
     );
     
     /**
+     * Scope: retrieve upcoming events
+     * @return Eloquent Scope
+     */
+    public function scopeUpcoming($query)
+    {
+        return $query->where('datetime_start', '>', date('Y-m-d H:i:s'))->orderBy('datetime_start', 'desc');
+    }
+    
+    /**
+     * Scope: retrieve past events
+     * @return Eloquent Scope
+     */
+    public function scopePast($query)
+    {
+        return $query->where('datetime_end', '<', date('Y-m-d H:i:s'))->orderBy('datetime_start', 'desc');
+    }
+    
+    /**
+     * Scope: retrieve current events
+     * @return Eloquent Scope
+     */
+    public function scopeCurrent($query)
+    {
+        return $query->where('datetime_start', '<', date('Y-m-d H:i:s'))->where('datetime_end', '>', date('Y-m-d H:i:s'))->orderBy('datetime_start', 'desc');
+    }
+    
+    /**
      * Relationship to User model.
      * @return Eloquent Scope
      */
@@ -52,9 +79,30 @@ class Event extends \Eloquent
      * Relationship to EventPresence model.
      * @return Eloquent Scope
      */
-    public function presences()
+    public function attendances()
     {
-        return $this->hasMany('\T4KModels\EventPresence', 'event_id', 'id');
+        return $this->hasMany('\T4KModels\EventPresence');
+    }
+    
+    /**
+     * Attribute: is current user attending the current event?
+     * @return boolean|NULL
+     */
+    public function getIsUserAttendingAttribute()
+    {
+        $attending = \T4KModels\EventPresence::where('event_id', $this->id)->where('user_id', \Auth::user()->id)->orderBy('id', 'desc')->first();
+            if (isset($attending) && $attending->is_attending == 1)
+            {
+                return true;
+            }
+            elseif (isset($attending) && $attending->is_attending == 0)
+            {
+                return 0;
+            }
+            else
+            {
+                return null;
+            }
     }
     
 }

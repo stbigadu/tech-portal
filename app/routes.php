@@ -45,19 +45,15 @@ Route::group(array('before' => 'auth'), function()
      */
     Route::group(array('prefix' => 'calendrier'), function()
     {
-        Route::any('/',                     array('as' => 'portal.events.index',        'uses' => 'T4KControllers\Events\EventsController@index'));
-        Route::any('afficher/{id}',         array('as' => 'portal.events.view',         'uses' => 'T4KControllers\Events\EventsController@view'));
+        Route::any('/',                     array('as' => 'portal.events.index',        'uses' => 'T4KControllers\Events\EventsController@upcoming'));
+        Route::any('avenir/{id?}',          array('as' => 'portal.events.upcoming',     'uses' => 'T4KControllers\Events\EventsController@upcoming'));
+        Route::any('anterieur/{id?}',       array('as' => 'portal.events.past',         'uses' => 'T4KControllers\Events\EventsController@past'));
         Route::any('ajouter',               array('as' => 'portal.events.create',       'uses' => 'T4KControllers\Events\EventsController@create'));
         Route::any('ajouter/save',          array('as' => 'portal.events.store',        'uses' => 'T4KControllers\Events\EventsController@store'));  
         Route::any('modifier/{id}',         array('as' => 'portal.events.edit',         'uses' => 'T4KControllers\Events\EventsController@edit'));
         Route::any('modifier/save/{id}',    array('as' => 'portal.events.update',       'uses' => 'T4KControllers\Events\EventsController@update'));
         Route::any('supprimer/{id}',        array('as' => 'portal.events.destroy',      'uses' => 'T4KControllers\Events\EventsController@destroy'));
     });
-    
-    /**
-     * Module User
-     * @namespace T4KControllers\Users
-     */
     
     /**
      * Module Nouvelles
