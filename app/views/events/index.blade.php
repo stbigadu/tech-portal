@@ -37,6 +37,7 @@
                     </div>
                 </div>
             </div>
+            
             <div class="row">
                 <div class="col-lg-12">
                     <div class="btn-toolbar" role="toolbar">
@@ -103,21 +104,19 @@
                 <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12<?php echo (isset($event)) ? ' hidden-xs' : ''; ?>">
                 
                     {{-- Current events ************************************************************************************************************** --}}
-                    <?php if (isset($current_events)) : ?>
+                    <?php if (isset($current_events) && count($current_events) > 0) : ?>
                     <ul class="nav nav-tabs" role="tablist">
                         <li class="active"><a>En ce moment</a></li>
                     </ul>
                     <div class="panel panel-default panel-tabs">
                         <div class="list-group">
-                            <?php if (count($current_events) > 0) : ?>
-                                <?php foreach ($current_events as $e) : ?>
-                                <a href="<?php echo route('portal.events.upcoming', array($e->id, 'page' => Input::get('page'))); ?>" class="list-group-item<?php echo ($e->id == @$event->id) ? ' list-group-item-warning' : ''; ?>">
-                                    <p class="list-group-item-subtitle small"><?php echo ($e->datetime_start == NULL) ? 'Aucune date.' : 'Le '.mb_strtolower(strftime('%A %e %B %Y', strtotime($e->datetime_start))).', de '.mb_strtolower(strftime('%kh%M', strtotime($e->datetime_start))).' à '.mb_strtolower(strftime('%kh%M', strtotime($e->datetime_end))); ?></p>
-                                    <p class="list-group-item-heading"><strong><?php echo strip_tags($e->title); ?></strong></p>
-                                    <p class="list-group-item-text small"><?php echo T4KHelpers::trunc_string(strip_tags($e->content), 100); ?></p>
-                                </a>
-                                <?php endforeach; ?>
-                            <?php endif; ?>
+                            <?php foreach ($current_events as $e) : ?>
+                            <a href="<?php echo route('portal.events.upcoming', array($e->id, 'page' => Input::get('page'))); ?>" class="list-group-item<?php echo ($e->id == @$event->id) ? ' list-group-item-warning' : ''; ?>">
+                                <p class="list-group-item-subtitle small"><?php echo ($e->datetime_start == NULL) ? 'Aucune date.' : 'Le '.mb_strtolower(strftime('%A %e %B %Y', strtotime($e->datetime_start))).', de '.mb_strtolower(strftime('%kh%M', strtotime($e->datetime_start))).' à '.mb_strtolower(strftime('%kh%M', strtotime($e->datetime_end))); ?></p>
+                                <p class="list-group-item-heading"><strong><?php echo strip_tags($e->title); ?></strong></p>
+                                <p class="list-group-item-text small"><?php echo T4KHelpers::trunc_string(strip_tags($e->content), 100); ?></p>
+                            </a>
+                            <?php endforeach; ?>
                         </div>
                     </div>
                     <?php endif; ?>

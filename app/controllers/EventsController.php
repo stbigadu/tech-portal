@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Mail;
 
 /**
  * T4KControllers\Events\EventsController class
@@ -132,6 +133,28 @@ class EventsController extends \BaseController {
 	        $event->title          = Input::get('title');
 	        $event->content        = Input::get('content');
 	        $event->save();
+	        $event = \T4KModels\Event::find($event->id);
+	        
+	        // Send email
+	        $mail_subject = $event->title.', le '.mb_strtolower(strftime('%A %e %B %Y, de %H h %M', strtotime($event->datetime_start))).' à '.mb_strtolower(strftime('%H h %M', strtotime($event->datetime_end)));
+	        $users = \T4KModels\User::where('id', 3)->get();
+	        
+	        foreach ($users as $user)
+	        {
+	            // Array of data to send to email
+	            $data = array(
+	                    'event'        => $event,
+	                    'user'         => $user
+	            );
+	            
+	            // Sending mail
+    	        Mail::send('emails.events.new', $data, function($message) use ($user, $mail_subject)
+    	        {
+    	            $message->from('no-reply@team3990.com', 'Équipe Team 3990: Tech for Kids');
+    	            $message->to($user->email, $user->full_name);
+    	            $message->subject($mail_subject);
+    	        });
+	        }
 	
 	        // Redirect to view screen with success message
 	        Session::flash('store', true);
