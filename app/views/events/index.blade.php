@@ -49,7 +49,7 @@
                         
                         <?php if (isset($event) && Auth::user()->is_admin) : ?>
                         <div class="btn-group">
-                            <a href="<?php echo route('portal.events.edit', array($event->id, 'page' => Input::get('page'))); ?>" class="btn btn-default"><i class="fa fa-pencil fa-fw"></i> Modifier l'évènement</a>
+                            <a href="<?php echo route('portal.events.edit', array($event->id, 'page' => Input::get('page'), 'view' => $currentRoute)); ?>" class="btn btn-default"><i class="fa fa-pencil fa-fw"></i> Modifier l'évènement</a>
                         </div>
                         <div class="btn-group">
                             <button class="btn btn-default" data-toggle="modal" data-target="#modal-destroy-<?php echo $event->id; ?>"><i class="fa fa-trash-o fa-fw"></i> Supprimer l'évènement</button>
@@ -64,10 +64,11 @@
                                     <div class="modal-body">
                                         <div class="panel panel-default">
                                             <div class="panel-body">
-                                                <i class="fa fa-bullhorn fa-fw fa-3x pull-left"></i>
+                                                <i class="fa fa-calendar fa-fw fa-3x pull-left"></i>
                                                 <div style="margin-left: 70px">
                                                     <h4 style="margin-top: 0"><?php echo strip_tags($event->title); ?></h4>
-                                                    Le <strong><?php echo mb_strtolower(strftime('%A %e %B %Y, à %H h %M', strtotime($event->datetime))); ?></strong><br />
+                                                    Débute le <strong><?php echo mb_strtolower(strftime('%A %e %B %Y, à %H h %M', strtotime($event->datetime_start))); ?></strong><br />
+                                                    Se termine le <strong><?php echo mb_strtolower(strftime('%A %e %B %Y, à %H h %M', strtotime($event->datetime_end))); ?></strong><br />
                                                     Par <?php echo $event->user->full_name; ?> (<i class="fa fa-envelope-o fa-fw"></i> <?php echo HTML::mailto($event->user->email); ?>)
                                                 </div>
                                             </div>
@@ -230,14 +231,14 @@
                                                 <div class="col-lg-4">
                                                     <div class="input-group">
                                                         <span class="input-group-addon">De :</span>
-                                                        <input class="form-control date text-center" id="datetime_start" name="datetime_start" type="text" value="<?php echo strftime('%k:%M', strtotime($event->datetime_start)); ?>" />
+                                                        <input class="form-control date text-center" id="time_start" name="time_start" type="text" value="<?php echo strftime('%k:%M', strtotime($event->datetime_start)); ?>" />
                                                         <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-4">
                                                     <div class="input-group">
                                                         <span class="input-group-addon">À :</span>
-                                                        <input class="form-control date text-center" id="datetime_end" name="datetime_end" type="text" value="<?php echo strftime('%k:%M', strtotime($event->datetime_end)); ?>" />
+                                                        <input class="form-control date text-center" id="time_end" name="time_end" type="text" value="<?php echo strftime('%k:%M', strtotime($event->datetime_end)); ?>" />
                                                         <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
                                                     </div>
                                                 </div>
@@ -278,14 +279,14 @@
                                             <div class="col-lg-3">
                                                 <div class="input-group">
                                                     <span class="input-group-addon">De :</span>
-                                                    <input class="form-control date text-center input-sm" id="datetime_start" name="datetime_start" type="text" value="<?php echo strftime('%k:%M', strtotime($event->datetime_start)); ?>" />
+                                                    <?php echo Form::text('time_start', strftime('%k:%M', strtotime($event->datetime_start)), array('class' => 'form-control date text-center input-sm', 'id' => 'time_start')); ?>
                                                     <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
                                                 </div>
                                             </div>
                                             <div class="col-lg-3">
                                                 <div class="input-group">
                                                     <span class="input-group-addon">À :</span>
-                                                    <input class="form-control date text-center input-sm" id="datetime_end" name="datetime_end" type="text" value="<?php echo strftime('%k:%M', strtotime($event->datetime_end)); ?>" />
+                                                    <input class="form-control date text-center input-sm" id="time_end" name="time_end" type="text" value="<?php echo strftime('%k:%M', strtotime($event->datetime_end)); ?>" />
                                                     <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
                                                 </div>
                                             </div>
@@ -431,8 +432,8 @@
                     endDate: '<?php echo str_limit($event->datetime_end, 10, ''); ?> 23:59:59' 
             };
             
-            $('#datetime_start').datetimepicker(datetimepickerParam);
-            $('#datetime_end').datetimepicker(datetimepickerParam);
+            $('#time_start').datetimepicker(datetimepickerParam);
+            $('#time_end').datetimepicker(datetimepickerParam);
             
             </script>
             <?php endif; ?>

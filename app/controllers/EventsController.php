@@ -126,15 +126,23 @@ class EventsController extends \BaseController {
 	    {
 	        // Create new object from model and save it
 	        $event = new \T4KModels\Event;
-	        $event->user_id      = Auth::user()->id;
-	        $event->datetime     = date('Y-m-d H:i:s');
-	        $event->title        = Input::get('title');
-	        $event->content      = Input::get('content');
+	        $event->user_id        = Auth::user()->id;
+	        $event->datetime_start = Input::get('datetime_start');
+	        $event->datetime_end   = Input::get('datetime_end');
+	        $event->title          = Input::get('title');
+	        $event->content        = Input::get('content');
 	        $event->save();
 	
 	        // Redirect to view screen with success message
 	        Session::flash('store', true);
-	        return Redirect::route('portal.events.view', $event->id);
+	        if (Input::get('datetime_end') >= date('Y-m-d H:i:s'))
+	        {
+	           return Redirect::route('portal.events.upcoming', $event->id);
+	        }
+	        else 
+	        {
+	            return Redirect::route('portal.events.past', $event->id);
+	        }
 	    }
 	}
 	
@@ -150,7 +158,7 @@ class EventsController extends \BaseController {
 	     
 	    // Array of data to send to view
 	    $data = array(
-                'event'       => $event,
+                'event'         => $event,
 	            'currentRoute'  => \Route::currentRouteName(),
                 'activeScreen'  => 'EventsIndex'
 	    );
@@ -179,13 +187,22 @@ class EventsController extends \BaseController {
 	    {
 	        // Retrieve object from model and update it
 	        $event = \T4KModels\Event::find($id);
-	        $event->title        = Input::get('title');
-	        $event->content      = Input::get('content');
+	        $event->datetime_start = Input::get('datetime_start');
+	        $event->datetime_end   = Input::get('datetime_end');
+	        $event->title          = Input::get('title');
+	        $event->content        = Input::get('content');
 	        $event->save();
 	
 	        // Redirect to view screen with success message
 	        Session::flash('update', true);
-	        return Redirect::route('portal.events.view', $event->id);
+            if (Input::get('datetime_end') >= date('Y-m-d H:i:s'))
+            {
+               return Redirect::route('portal.events.upcoming', $event->id);
+            }
+            else 
+            {
+                return Redirect::route('portal.events.past', $event->id);
+            }
 	    }
 	}
 	
@@ -198,7 +215,7 @@ class EventsController extends \BaseController {
 	{
 	    // Retrieve object
 	    $event = \T4KModels\Event::where('id', $id)->first();
-	    Session::flash('object_name', $event->title_FR);
+	    Session::flash('object_name', $event->title);
 	    
 	    // Delete object
 	    $event->delete();
@@ -225,26 +242,25 @@ class EventsController extends \BaseController {
 	    
 	    if (isset($confirmation))
 	    {
-	        $confirmation->datetime_start  = Input::get('date_event').' '.Input::get('datetime_start').':00';
-	        $confirmation->datetime_end    = Input::get('date_event').' '.Input::get('datetime_end').':00';
+	        $confirmation->datetime_start  = Input::get('date_event').' '.Input::get('time_start').':00';
+	        $confirmation->datetime_end    = Input::get('date_event').' '.Input::get('time_end').':00';
 	        $confirmation->is_attending    = Input::get('attending');
 	        $confirmation->save();
-	        Session::flash('confirm', array(Input::get('date_event').' '.Input::get('datetime_start').':00', Input::get('date_event').' '.Input::get('datetime_end').':00'));
 	    }
 	    else
 	    {
 	        $confirming = new \T4KModels\EventPresence;
-	        $confirming->datetime_start    = Input::get('date_event').' '.Input::get('datetime_start').':00';
-	        $confirming->datetime_end      = Input::get('date_event').' '.Input::get('datetime_end').':00';
+	        $confirming->datetime_start    = Input::get('date_event').' '.Input::get('time_start').':00';
+	        $confirming->datetime_end      = Input::get('date_event').' '.Input::get('time_end').':00';
 	        $confirming->is_attending      = Input::get('attending');
 	        $confirming->user_id           = \Auth::user()->id;
 	        $confirming->event_id          = Input::get('id');
 	        $confirming->save();
-	        Session::flash('confirm', array(Input::get('date_event').' '.Input::get('datetime_start').':00', Input::get('date_event').' '.Input::get('datetime_end').':00'));
 	    }
 	    
 	    // Redirect to view screen with success message
 	    return Redirect::route(Input::get('view'), array(Input::get('id'), 'page' => Input::get('page')));
+	    
 	}
 	
 	/**

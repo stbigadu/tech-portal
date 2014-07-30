@@ -28,7 +28,9 @@ class Event extends \Eloquent
      * @var array
      */
     public static $rules = array(
-        'title'             => 'required'
+        'title'             => 'required',
+        'datetime_start'    => 'required',
+        'datetime_end'      => 'required'
     );
     
     /**
@@ -36,7 +38,9 @@ class Event extends \Eloquent
      * @var array
      */
     public static $messages = array(
-        'title.required'    => 'Le titre de la nouvelle est requise.',
+        'title.required'            => 'Le titre de la nouvelle est requise.',
+        'datetime_start.required'   => 'La date et l\'heure de début de l\'évènement sont requises.',
+        'datetime_end.required'     => 'La date et l\'heure de fin de l\'évènement sont requises.'
     );
     
     /**
