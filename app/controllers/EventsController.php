@@ -209,6 +209,45 @@ class EventsController extends \BaseController {
 	}
 	
 	/**
+	 * Confirm the current user's attendance information.
+	 * @param int $id
+	 * @return Response
+	 */
+	public function confirm()
+	{
+	    
+	    // Check if there is already an attendance confirmation
+	    $confirmation = \T4KModels\EventPresence::
+	             where('event_id', Input::get('id'))
+	           ->where('user_id', \Auth::user()->id)
+	           ->orderBy('id', 'desc')
+	           ->first();
+	    
+	    if (isset($confirmation))
+	    {
+	        $confirmation->datetime_start  = Input::get('date_event').' '.Input::get('datetime_start').':00';
+	        $confirmation->datetime_end    = Input::get('date_event').' '.Input::get('datetime_end').':00';
+	        $confirmation->is_attending    = Input::get('attending');
+	        $confirmation->save();
+	        Session::flash('confirm', array(Input::get('date_event').' '.Input::get('datetime_start').':00', Input::get('date_event').' '.Input::get('datetime_end').':00'));
+	    }
+	    else
+	    {
+	        $confirming = new \T4KModels\EventPresence;
+	        $confirming->datetime_start    = Input::get('date_event').' '.Input::get('datetime_start').':00';
+	        $confirming->datetime_end      = Input::get('date_event').' '.Input::get('datetime_end').':00';
+	        $confirming->is_attending      = Input::get('attending');
+	        $confirming->user_id           = \Auth::user()->id;
+	        $confirming->event_id          = Input::get('id');
+	        $confirming->save();
+	        Session::flash('confirm', array(Input::get('date_event').' '.Input::get('datetime_start').':00', Input::get('date_event').' '.Input::get('datetime_end').':00'));
+	    }
+	    
+	    // Redirect to view screen with success message
+	    return Redirect::route(Input::get('view'), array(Input::get('id'), 'page' => Input::get('page')));
+	}
+	
+	/**
 	 * Catch-all method for handling missing methods.
 	 * @return Redirect Response
 	 */

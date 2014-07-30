@@ -11,10 +11,15 @@
         
         @section('stylesheets')
             @parent
+            <!-- Bootstrap Datetime Picker -->
+            {{ HTML::style('/assets/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css'); }}
         @stop
         
         @section('scripts_header')
             @parent
+            <!-- Bootstrap Datetime Picker -->
+            {{ HTML::script('/assets/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js'); }}
+            {{ HTML::script('/assets/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.fr.js'); }}
         @stop
         
     @stop
@@ -101,6 +106,7 @@
                         <li<?php echo ($currentRoute == 'portal.events.past') ? ' class="active"' : ''; ?>><a href="<?php echo route('portal.events.past'); ?>">Passés</a></li>
                     </ul>
 
+                    {{-- Past events ***************************************************************************************************************** --}}
                     <?php if ($currentRoute == 'portal.events.past') : ?>
                     <div class="panel panel-default panel-tabs">
                         <div class="list-group">
@@ -120,12 +126,13 @@
                         </div>
                     </div>
                     
+                    {{-- Current and upcoming events ************************************************************************************************* --}}
                     <?php else : ?>
                     <div class="panel panel-default panel-tabs">
                         <div class="list-group">
                             <?php if (count($upcoming_events) > 0) : ?>
                                 <?php foreach ($upcoming_events as $e) : ?>
-                                <a href="<?php echo route('portal.events.past', array($e->id, 'page' => Input::get('page'))); ?>" class="list-group-item<?php echo ($e->id == @$event->id) ? ' list-group-item-warning' : ''; ?>">
+                                <a href="<?php echo route('portal.events.upcoming', array($e->id, 'page' => Input::get('page'))); ?>" class="list-group-item<?php echo ($e->id == @$event->id) ? ' list-group-item-warning' : ''; ?>">
                                     <p class="list-group-item-subtitle small"><?php echo ($e->datetime_start == NULL) ? 'Aucune date.' : 'Le '.mb_strtolower(strftime('%A %e %B %Y', strtotime($e->datetime_start))).', de '.mb_strtolower(strftime('%kh%M', strtotime($e->datetime_start))).' à '.mb_strtolower(strftime('%kh%M', strtotime($e->datetime_end))); ?></p>
                                     <p class="list-group-item-heading"><strong><?php echo strip_tags($e->title); ?></strong></p>
                                     <p class="list-group-item-text small"><?php echo T4KHelpers::trunc_string(strip_tags($e->content), 100); ?></p>
@@ -146,6 +153,7 @@
                 <?php if (!isset($event)) : ?>
                 <div class="col-lg-8 col-md-8 col-sm-6 hidden-xs">
                 
+                    {{-- Event Status Messages ******************************************************************************************************* --}}
                     <?php if (Session::has('destroy') && Session::get('destroy') == true) : ?>
                         <div class="alert alert-success alert-dismissable fade in">
                             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
@@ -166,6 +174,7 @@
                         <div class="row">
                             <div class="col-lg-12">
                     
+                                {{-- Event Status Messages ******************************************************************************************* --}}
                                 <?php if (Session::has('store') && Session::get('store') == true) : ?>
                                     <div class="alert alert-success alert-dismissable fade in">
                                         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
@@ -186,34 +195,107 @@
                                     </div>
                                 <?php endif; ?>
                                 
+                                {{-- Attendance status *********************************************************************************************** --}}                                
                                 <?php if ($event->is_user_attending == true) : ?>
-                                <div class="alert alert-success">
-                                    <i class="fa fa-check-circle fa-fw"></i> 
-                                    <strong>Présence confirmée</strong> 
-                                    Merci de participer à l'évènement! 
-                                    <a href="#" class="btn btn-default btn-xs pull-right"><i class="fa fa-times-circle fa-fw"></i> Finalement, je serai absent(e)</a>
-                                </div>
-                                <?php elseif ($event->is_user_attending == null) : ?>
-                                <div class="alert alert-warning">
-                                    <i class="fa fa-question-circle fa-fw fa-3x pull-left"></i>
-                                    <div style="margin-left: 75px">
-                                        <h3 style="margin: 0">Confirmez votre présence</h3>
-                                        <p>Serez-vous présent à l'évènement?</p>
-                                        <p>
-                                            <a href="#" class="btn btn-success"><i class="fa fa-check-circle fa-fw"></i> Oui, je serai présent(e)</a> 
-                                            <a href="#" class="btn btn-danger"><i class="fa fa-times-circle fa-fw"></i> Non, je serai absent(e)</a>
-                                        </p>
+                                
+                                    <?php echo Form::open(array('route' => 'portal.events.confirm')); ?>
+                                    <?php echo Form::hidden('id', $event->id); ?>
+                                    <?php echo Form::hidden('attending', 0); ?>
+                                    <?php echo Form::hidden('view', $currentRoute); ?>
+                                    <?php echo Form::hidden('page', Input::get('page')); ?>
+                                    <div class="alert alert-success">
+                                        <i class="fa fa-check-circle fa-fw"></i> 
+                                        <strong>Présence confirmée</strong> 
+                                        Merci de participer à l'évènement! 
+                                        <button type="submit" class="btn btn-danger btn-xs pull-right"><i class="fa fa-times-circle fa-fw"></i> Finalement, je serai absent(e)</button>
                                     </div>
-                                </div>
+                                    <?php echo Form::close(); ?>
+                                
+                                <?php elseif ($event->is_user_attending === null) : ?>
+                                
+                                    <div class="alert alert-warning">
+                                        <i class="fa fa-question-circle fa-fw fa-3x pull-left"></i>
+                                        <div style="margin-left: 75px">
+                                            <h3 style="margin: 0">Confirmez votre présence</h3>
+                                            <p>Serez-vous présent à l'évènement?</p>
+                                            
+                                            <?php echo Form::open(array('route' => 'portal.events.confirm')); ?>
+                                            <?php echo Form::hidden('id', $event->id); ?>
+                                            <?php echo Form::hidden('date_event', str_limit($event->datetime_start, 10, '')); ?>
+                                            <?php echo Form::hidden('attending', 1); ?>
+                                            <?php echo Form::hidden('view', $currentRoute); ?>
+                                            <?php echo Form::hidden('page', Input::get('page')); ?>
+                                            <div class="row">
+                                                <div class="col-lg-4"><p><button type="submit" class="btn btn-success"><i class="fa fa-check-circle fa-fw"></i> Oui, je serai présent(e)</button></p></div>
+                                                <div class="col-lg-4">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">De :</span>
+                                                        <input class="form-control date text-center" id="datetime_start" name="datetime_start" type="text" value="<?php echo strftime('%k:%M', strtotime($event->datetime_start)); ?>" />
+                                                        <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-4">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">À :</span>
+                                                        <input class="form-control date text-center" id="datetime_end" name="datetime_end" type="text" value="<?php echo strftime('%k:%M', strtotime($event->datetime_end)); ?>" />
+                                                        <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <?php echo Form::close(); ?>
+                                            
+                                            <?php echo Form::open(array('route' => 'portal.events.confirm')); ?>
+                                            <?php echo Form::hidden('id', $event->id); ?>
+                                            <?php echo Form::hidden('attending', 0); ?>
+                                            <?php echo Form::hidden('view', $currentRoute); ?>
+                                            <?php echo Form::hidden('page', Input::get('page')); ?>
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <button type="submit" class="btn btn-danger"><i class="fa fa-times-circle fa-fw"></i> Non, je serai absent(e)</button>
+                                                </div>
+                                            </div>
+                                            <?php echo Form::close(); ?>
+    
+                                        </div>
+                                    </div>
+                                    
                                 <?php else : ?>
-                                <div class="alert alert-danger">
-                                    <i class="fa fa-times-circle fa-fw"></i> 
-                                    <strong>Absence confirmée</strong> 
-                                    Nous sommes tristes. Revenez!  
-                                    <a href="#" class="btn btn-success btn-xs pull-right"><i class="fa fa-check-circle fa-fw"></i> Finalement, je serai présent(e)</a>
-                                </div>
+                                
+                                    <?php echo Form::open(array('route' => 'portal.events.confirm')); ?>
+                                    <?php echo Form::hidden('id', $event->id); ?>
+                                    <?php echo Form::hidden('date_event', str_limit($event->datetime_start, 10, '')); ?>
+                                    <?php echo Form::hidden('attending', 1); ?>
+                                    <?php echo Form::hidden('view', $currentRoute); ?>
+                                    <?php echo Form::hidden('page', Input::get('page')); ?>
+                                    <div class="alert alert-danger">
+                                        <div class="row">
+                                            <div class="col-lg-12">
+                                                <p><i class="fa fa-times-circle fa-fw"></i> <strong>Absence confirmée</strong> Nous sommes tristes. Revenez!</p>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-lg-4 text-right"><button type="submit" class="btn btn-success btn-sm"><i class="fa fa-check-circle fa-fw"></i> Finalement, je serai présent(e)</button></div>
+                                            <div class="col-lg-3">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon">De :</span>
+                                                    <input class="form-control date text-center input-sm" id="datetime_start" name="datetime_start" type="text" value="<?php echo strftime('%k:%M', strtotime($event->datetime_start)); ?>" />
+                                                    <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-3">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon">À :</span>
+                                                    <input class="form-control date text-center input-sm" id="datetime_end" name="datetime_end" type="text" value="<?php echo strftime('%k:%M', strtotime($event->datetime_end)); ?>" />
+                                                    <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <?php echo Form::close(); ?>
+                                
                                 <?php endif; ?>
-                            
+                                
+                                {{-- Event details *************************************************************************************************** --}}
                                 <div class="panel panel-default">
                                     <div class="panel-heading text-muted small">
                                         <dl class="dl-horizontal">
@@ -243,6 +325,7 @@
                         
                         <div class="row">
                         
+                            {{-- Attendance status *************************************************************************************************** --}}
                             <div class="col-lg-6">
                                 <div class="panel panel-default">
                                     <div class="panel-heading">
@@ -262,8 +345,8 @@
                                             <?php if ($attendance->is_attending == true) : ?>
                                             <tr>
                                                 <td><?php echo $attendance->user->full_name; ?></td>
-                                                <td class="text-center"><?php echo ($event->datetime_start == NULL) ? 'Aucune date.' : mb_strtolower(strftime('%kh%M', strtotime($attendance->datetime_start))); ?></td>
-                                                <td class="text-center"><?php echo ($event->datetime_start == NULL) ? 'Aucune date.' : mb_strtolower(strftime('%kh%M', strtotime($attendance->datetime_end))); ?></td>
+                                                <td class="text-center"><?php echo ($attendance->datetime_start == NULL) ? 'Aucune date.' : mb_strtolower(strftime('%kh%M', strtotime($attendance->datetime_start))); ?></td>
+                                                <td class="text-center"><?php echo ($attendance->datetime_start == NULL) ? 'Aucune date.' : mb_strtolower(strftime('%kh%M', strtotime($attendance->datetime_end))); ?></td>
                                             </tr>
                                             <?php $count++; ?>
                                             <?php endif; ?>
@@ -278,6 +361,7 @@
                                 </div>
                             </div>
                             
+                            {{-- Attendance status *************************************************************************************************** --}}
                             <div class="col-lg-6">
                                 <div class="panel panel-default">
                                     <div class="panel-heading">
@@ -330,6 +414,29 @@
     
         @section('scripts_eof')
             @parent
+            
+            <?php if (isset($event)) : ?>
+            <script type="text/javascript">
+            
+            // Datetime Picker
+            var datetimepickerParam = {
+                    language: 'fr',
+                    autoclose: true,
+                    format: 'hh:ii',
+                    startView: 1,
+                    minView: 0,
+                    maxView: 1,
+                    minuteStep: 15,
+                    startDate: '<?php echo str_limit($event->datetime_start, 10, ''); ?> 00:00:00',
+                    endDate: '<?php echo str_limit($event->datetime_end, 10, ''); ?> 23:59:59' 
+            };
+            
+            $('#datetime_start').datetimepicker(datetimepickerParam);
+            $('#datetime_end').datetimepicker(datetimepickerParam);
+            
+            </script>
+            <?php endif; ?>
+            
         @stop
         
     @stop

@@ -53,6 +53,7 @@ Route::group(array('before' => 'auth'), function()
         Route::any('modifier/{id}',         array('as' => 'portal.events.edit',         'uses' => 'T4KControllers\Events\EventsController@edit'));
         Route::any('modifier/save/{id}',    array('as' => 'portal.events.update',       'uses' => 'T4KControllers\Events\EventsController@update'));
         Route::any('supprimer/{id}',        array('as' => 'portal.events.destroy',      'uses' => 'T4KControllers\Events\EventsController@destroy'));
+        Route::any('confirm/',              array('as' => 'portal.events.confirm',      'uses' => 'T4KControllers\Events\EventsController@confirm'));
     });
     
     /**
