@@ -31,35 +31,35 @@
             <div class="row login-container">
             
                 <div class="col-lg-4 col-md-4 col-lg-offset-2 col-md-offset-2 hidden-xs">
-                    {{ HTML::image('/assets/images/logos-t4k/T4K_RGB_round[colour]_transparent.png', 'Équipe Team 3990: Tech for Kids', array('class' => 'img-responsive')) }}
+                    <?php echo HTML::image('/assets/images/logos-t4k/T4K_RGB_round[colour]_transparent.png', 'Équipe Team 3990: Tech for Kids', array('class' => 'img-responsive')); ?>
                 </div>
     
                 <div class="col-lg-4 col-md-4">
-                    {{ Form::open(array('url' => 'users/connection', 'class' => 'form_signin')) }}
+                    <?php echo Form::open(array('route' => 'portal.users.connecting', 'class' => 'form_signin')) ?>
                     
                         <h2 class="form-signin-heading login-heading">Se connecter</h2>
                         
                         <p>Pour continuer sur <strong>Tech Portail</strong>, veuillez vous connecter.</p>
                         
-                        @if(Session::has('message'))
+                        <?php if(Session::has('message')) : ?>
                             <div class="alert alert-danger">
-                                <p>{{ Session::get('message') }}</p>
+                                <p><?php echo Session::get('message') ?></p>
                                 <ul>
-                                    @foreach($errors->all() as $error)
+                                    <?php foreach ($errors->all() as $error) : ?>
                                         <li>{{ $error }}</li>
-                                    @endforeach
+                                    <?php endforeach; ?>
                                 </ul>
                             </div>
-                        @endif
+                        <?php endif; ?>
                 
                         <div class="input-group" style="margin-bottom: 10px">
                             <span class="input-group-addon"><i class="fa fa-user fa-fw"></i></span>
-                            <input type="email" id="email" name="email" class="form-control" placeholder="Courriel" required autofocus />
+                            <?php echo Form::text('email', null, array('class' => 'form-control', 'placeholder' => 'Courriel', 'id' => 'email')); ?>
                         </div>
                         
                         <div class="input-group">
                             <span class="input-group-addon"><i class="fa fa-lock fa-fw"></i></span>
-                            <input type="password" id="password" name="password" class="form-control" placeholder="Mot de passe" required />
+                            <?php echo Form::password('password', array('class' => 'form-control', 'placeholder' => 'Mot de passe', 'id' => 'password')); ?>
                         </div>
                         
                         <label class="checkbox">
@@ -70,7 +70,7 @@
                         
                         <p><a href="#">J'ai oublié mon mot de passe</a></p>
                         
-                    {{ Form::close() }}
+                    <?php echo Form::close(); ?>
                     
                 </div>
                             

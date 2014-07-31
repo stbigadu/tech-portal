@@ -19,7 +19,7 @@ Route::group(array('prefix' => 'users'), function()
 {
     // Login screen.
     Route::any('login',         array('as' => 'portal.users.login',         'uses' => 'T4KControllers\Users\UsersController@login'));
-    Route::any('connection',    array('as' => 'portal.users.connection',    'uses' => 'T4KControllers\Users\UsersController@connection'));
+    Route::any('connecting',    array('as' => 'portal.users.connecting',    'uses' => 'T4KControllers\Users\UsersController@connecting'));
 
     // Initial administrator setup page
     Route::any('setup',         array('as' => 'portal.users.setup',         'uses' => 'T4KControllers\Users\UsersController@setup'));
@@ -86,8 +86,13 @@ Route::group(array('before' => 'auth'), function()
      */
     Route::group(array('prefix' => 'users'), function()
     {
-        Route::any('/',                     array('as' => 'portal.users.index',         'uses' => 'T4KControllers\Users\UsersController@index'));
-        Route::any('profile',               array('as' => 'portal.users.profile',       'uses' => 'T4KControllers\Users\UsersController@profile'));
+        Route::any('/',                     array('as' => 'portal.users.index',             'uses' => 'T4KControllers\Users\UsersController@index'));
+        Route::any('profile',               array('as' => 'portal.users.profile',           'uses' => 'T4KControllers\Users\UsersController@profile'));
+        Route::any('export',                array('as' => 'portal.users.export',            'uses' => 'T4KControllers\Users\UsersController@export'));
+        Route::any('modifier/password',     array('as' => 'portal.users.edit.password',     'uses' => 'T4KControllers\Users\UsersController@edit_password'));
+        Route::any('modifier/infos',        array('as' => 'portal.users.edit.info',         'uses' => 'T4KControllers\Users\UsersController@edit_info'));
+        Route::any('save/password',         array('as' => 'portal.users.update.password',   'uses' => 'T4KControllers\Users\UsersController@update_password'));
+        Route::any('save/infos',            array('as' => 'portal.users.update.info',       'uses' => 'T4KControllers\Users\UsersController@update_info'));
     });
     
 });

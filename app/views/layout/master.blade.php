@@ -66,7 +66,7 @@
                 <ul class="nav navbar-nav navbar-right">
                     <?php if (Auth::check()) : ?>
                     <li class="hidden-xs"><p class="navbar-text">Bonjour, <strong><?php echo Auth::user()->first_name; ?></strong>!</p></li>
-                    <li><a href="#"><i class="fa fa-user fa-fw"></i> Mon compte</a></li>
+                    <li<?php echo (@$activeScreen == 'ProfileIndex') ? ' class="active"' : ''; ?>><a href="<?php echo route('portal.users.profile'); ?>"><i class="fa fa-user fa-fw"></i> Mon compte</a></li>
                     <li><a href="<?php echo route('portal.users.logout'); ?>"><i class="fa fa-power-off fa-fw"></i> Se déconnecter</a></li>
                     <?php endif; ?>
                     <li class="dropdown hidden-xs">

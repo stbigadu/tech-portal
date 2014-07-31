@@ -37,7 +37,7 @@
                     <div class="btn-toolbar" role="toolbar">
                     
                         <div class="btn-group">
-                            <a href="#" class="btn btn-default"><i class="fa fa-print fa-fw"></i> Imprimer la liste des membres de l'équipe</a>
+                            <a href="#" onclick="popup('<?php echo route('portal.users.export'); ?>')" class="btn btn-default"><i class="fa fa-print fa-fw"></i> Imprimer la liste des membres de l'équipe</a>
                         </div>
                         
                     </div>
@@ -171,6 +171,13 @@
     
         @section('scripts_eof')
             @parent
+            <script language="javascript" type="text/javascript">
+            function popup(url) {
+            	newwindow=window.open(url,'','height=500,width=700,location=no,menubar=no,status=no,toolbar=no,scrollbars=yes');
+            	newwindow.focus()
+            	return false;
+            }
+            </script>
         @stop
         
     @stop

@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Session;
 
 /**
  * T4KControllers\Users\UsersController class
@@ -39,7 +40,7 @@ class UsersController extends \BaseController
 	 * Verify the login credentials.
 	 * @return Redirect Response
 	 */
-	public function connection()
+	public function connecting()
 	{
 	    if (Auth::attempt(array('email' => Input::get('email'), 'password' => Input::get('password')))) 
 	    {
@@ -67,16 +68,12 @@ class UsersController extends \BaseController
 	 */
 	public function index()
 	{
-	    // Retrieve all news
-        $users = \T4KModels\User::
-              orderBy('last_name', 'asc')
-            ->orderBy('first_name', 'asc')
-            ->get();
+	    // Retrieve all users
+        $users = \T4KModels\User::orderBy('last_name', 'asc')->orderBy('first_name', 'asc')->get();
 	    	    
 	    // Array of data to send to view
 	    $data = array(
 	            'users'            => $users,
-	            'UserRole'         => $this->UserRole,
 	            'ItemsCount'       => \T4KModels\User::count(),
 	            'currentRoute'     => \Route::currentRouteName(),
 	            'activeScreen'     => 'UsersIndex'
@@ -87,21 +84,167 @@ class UsersController extends \BaseController
 	}
 	
 	/**
+	 * Export list of users for printing.
+	 * @return View Response
+	 */
+	public function export()
+	{
+	    // Retrieve all users
+        $users = \T4KModels\User::orderBy('last_name', 'asc')->orderBy('first_name', 'asc')->get();
+        
+        // Array of data to send to view
+        $data = array(
+                'users'            => $users,
+                'ItemsCount'       => \T4KModels\User::count(),
+                'currentRoute'     => \Route::currentRouteName(),
+                'activeScreen'     => 'UsersIndex'
+        );
+         
+        // Render view
+        $this->layout->content = \View::make('users.export', $data);
+	}
+	
+	/**
 	 * Show the user's profile screen if user is logged in.
 	 * @return View Response
 	 */
 	public function profile()
 	{
+	    // Retrieve current user
+	    $user = \T4KModels\User::find(Auth::user()->id);
+	    
 	    // Array of data to send to view
 	    $data = array(
+	            'user'             => $user,
 	            'currentRoute'     => \Route::currentRouteName(),
-	            'activeScreen'     => 'UsersIndex'
+	            'activeScreen'     => 'ProfileIndex'
 	    );
 	     
 	    // Render view
 	    $this->layout->content = \View::make('users.moncompte', $data);
 	}
 	
+	/**
+	 * Edit user password.
+	 * @return View Response
+	 */
+	public function edit_password()
+	{
+	    // Array of data to send to view
+	    $data = array(
+	            'currentRoute'     => \Route::currentRouteName(),
+	            'activeScreen'     => 'ProfileIndex'
+	    );
+	    
+	    // Render view
+	    $this->layout->content = \View::make('users.edit-password', $data);
+	}
+	
+	/**
+	 * Edit user info.
+	 * @return View Response
+	 */
+	public function edit_info()
+	{
+	    // Array of data to send to view
+	    $data = array(
+	            'currentRoute'     => \Route::currentRouteName(),
+	            'activeScreen'     => 'ProfileIndex'
+	    );
+	     
+	    // Render view
+	    $this->layout->content = \View::make('users.edit-info', $data);
+	}
+	
+	/**
+	 * Update user password.
+	 * @return View Response
+	 */
+	public function update_password()
+	{
+        // Validation rules
+        $rules = array(
+                'old_password'              => 'required|passcheck',
+                'new_password'              => 'required|confirmed|between:6,25',
+        );
+        $messages = array(
+                'old_password.required'     => 'Le mot de passe actuel est requis.',
+                'new_password.required'     => 'Veuillez entrer un nouveau mot de passe.',
+                'new_password.between'      => 'Le nouveau mot de passe doit contenir entre :min et :max caractères.',
+                'new_password.confirmed'    => 'Le nouveau mot de passe a été mal indiqué. Veuillez essayer à nouveau.',
+                'passcheck'                 => 'Le mot de passe actuel n\'est pas valide.'
+        );
+        // Password validation
+        Validator::extend('passcheck', function ($attribute, $value, $parameters)
+        {
+            return Hash::check($value, Auth::user()->getAuthPassword());
+        });
+        
+	    $validator = Validator::make(Input::all(), $rules, $messages);
+	
+	    // Validator check
+	    if ($validator->fails())
+	    {
+	        // Throw error and redirect to previous screen
+	        return Redirect::route('portal.users.edit.password')->withErrors($validator)->withInput();
+	    }
+	    else
+	    {
+	        // Update user information
+	        $user = \T4KModels\User::find(Auth::user()->id);
+	        $user->password = Hash::make(Input::get('new_password'));
+	        $user->save();
+	
+	        // Redirect to view screen with success message
+	        Session::flash('update_password', true);
+            return Redirect::route('portal.users.profile');
+	    }
+	}
+	
+	/**
+	 * Update user info.
+	 * @return View Response
+	 */
+	public function update_info()
+	{
+	    // Validation rules
+	    $rules = array(
+	            'old_password'              => 'required|passcheck',
+	            'new_password'              => 'required|confirmed|between:6,25',
+	    );
+	    $messages = array(
+	            'old_password.required'     => 'Le mot de passe actuel est requis.',
+	            'new_password.required'     => 'Veuillez entrer un nouveau mot de passe.',
+	            'new_password.between'      => 'Le nouveau mot de passe doit contenir entre :min et :max caractères.',
+	            'new_password.confirmed'    => 'Le nouveau mot de passe a été mal indiqué. Veuillez essayer à nouveau.',
+	            'passcheck'                 => 'Le mot de passe actuel n\'est pas valide.'
+	    );
+	    // Password validation
+	    Validator::extend('passcheck', function ($attribute, $value, $parameters)
+	    {
+	        return Hash::check($value, Auth::user()->getAuthPassword());
+	    });
+	    
+	    $validator = Validator::make(Input::all(), $rules, $messages);
+	    
+	    // Validator check
+	    if ($validator->fails())
+	    {
+	        // Throw error and redirect to previous screen
+	        return Redirect::route('portal.users.edit.info')->withErrors($validator)->withInput();
+	    }
+	    else
+	    {
+	        // Update user information
+	        $user = \T4KModels\User::find(Auth::user()->id);
+	        $user->password = Hash::make(Input::get('new_password'));
+	        $user->save();
+	    
+	        // Redirect to view screen with success message
+	        Session::flash('update_info', true);
+	        return Redirect::route('portal.users.profile');
+	    }
+	}
 
 	/**
 	 * Initial administrator setup screen.
