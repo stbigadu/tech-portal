@@ -33,7 +33,7 @@ class DashboardController extends \BaseController {
 	public function index()
 	{
 	    // Retrieve upcoming events items
-	    $upcoming_events = \T4KModels\Event::upcoming()->get();
+	    $upcoming_events = \T4KModels\Event::upcoming()->paginate(3);
 	     
 	    // Retrieve current events items
 	    $current_events = \T4KModels\Event::current()->get();

@@ -96,6 +96,94 @@
                     </div>
                 </div>
                 
+                <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                    <?php if (count($current_events) > 0) : ?>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Tech Atelier ouvert en ce moment</h3>
+                        </div>
+                        
+                        <table class="table table-hover">
+                            <tbody>
+                            <?php foreach ($current_events as $event) : ?>
+                                <tr>
+                                    <td>
+                                        <span class="small text-muted"><?php echo ($event->datetime_start == NULL) ? 'Aucune date.' : 'Le '.mb_strtolower(strftime('%A %e %B %Y', strtotime($event->datetime_start))).', de '.mb_strtolower(strftime('%kh%M', strtotime($event->datetime_start))).' à '.mb_strtolower(strftime('%kh%M', strtotime($event->datetime_end))); ?></span><br />
+                                        <strong><a href="<?php echo route('portal.events.upcoming', array($event->id)); ?>"><?php echo strip_tags($event->title); ?></a></strong>
+                                            
+                                        <?php 
+                                        $openingHour = $event->datetime_start;
+                                        $closingHour = $event->datetime_end;
+                                        foreach ($event->attendances as $attendance) 
+                                        {
+                                            if ($attendance->user->is_mentor && $attendance->is_attending)
+                                            {
+                                                if ($attendance->datetime_start < $openingHour)     $openingHour = $attendance->datetime_start;
+                                                if ($attendance->datetime_end > $closingHour)       $closingHour = $attendance->datetime_end;
+                                            }
+                                        }
+                                        ?>
+                                        <div class="clock">
+                                            <?php echo strftime('%k:%M', strtotime($openingHour)); ?>
+                                            <i class="fa fa-caret-right fa-fw"></i>
+                                            <?php echo strftime('%k:%M', strtotime($closingHour)); ?>
+                                        </div>
+                                                
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                        
+                    </div>
+                    <?php endif; ?>
+                    
+                    <?php if (count($upcoming_events) > 0) : ?>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Heures d'ouverture de Tech Atelier</h3>
+                        </div>
+                        
+                        <table class="table table-hover">
+                            <tbody>
+                            <?php foreach ($upcoming_events as $event) : ?>
+                                <tr>
+                                    <td>
+                                        <span class="small text-muted"><?php echo ($event->datetime_start == NULL) ? 'Aucune date.' : 'Le '.mb_strtolower(strftime('%A %e %B %Y', strtotime($event->datetime_start))).', de '.mb_strtolower(strftime('%kh%M', strtotime($event->datetime_start))).' à '.mb_strtolower(strftime('%kh%M', strtotime($event->datetime_end))); ?></span><br />
+                                        <strong><a href="<?php echo route('portal.events.upcoming', array($event->id)); ?>"><?php echo strip_tags($event->title); ?></a></strong>
+                                            
+                                        <?php 
+                                        $openingHour = $event->datetime_start;
+                                        $closingHour = $event->datetime_end;
+                                        foreach ($event->attendances as $attendance) 
+                                        {
+                                            if ($attendance->user->is_mentor && $attendance->is_attending)
+                                            {
+                                                if ($attendance->datetime_start < $openingHour)     $openingHour = $attendance->datetime_start;
+                                                if ($attendance->datetime_end > $closingHour)       $closingHour = $attendance->datetime_end;
+                                            }
+                                        }
+                                        ?>
+                                        <div class="clock" style="margin: 10px auto; width: 70%">
+                                            <?php echo strftime('%k:%M', strtotime($openingHour)); ?>
+                                            <i class="fa fa-caret-right fa-fw"></i>
+                                            <?php echo strftime('%k:%M', strtotime($closingHour)); ?>
+                                        </div>
+                                        
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                        
+                        <div class="panel-footer text-center">
+                            <a href="<?php echo route('portal.horaire.index'); ?>" class="btn btn-default">Voir l'horaire complet <i class="fa fa-chevron-circle-right fa-fw"></i></a>
+                        </div>
+                        
+                    </div>
+                    <?php endif; ?>
+                </div>
+                
             </div>
             
             <div class="row hidden-xs">
