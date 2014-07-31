@@ -49,7 +49,7 @@
             </div>
             
             <div class="row">
-                <div class="col-lg-12">
+                <div class="col-lg-6 col-lg-offset-3 col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2 col-xs-12">
                     <?php if (Session::has('update_password') && Session::get('update_password') == true) : ?>
                         <div class="alert alert-success alert-dismissable fade in">
                             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
@@ -123,7 +123,7 @@
                                 <dd><i class="fa fa-phone fa-fw"></i> <?php echo $user->home_number_2; ?></dd>
                                 
                                 <dt>Téléphone (autre)</dt>
-                                <dd><i class="fa fa-building fa-fw"></i> <?php echo $user->office_number; ?></dd>
+                                <dd><i class="fa fa-building fa-fw"></i> <?php echo $user->other_number; ?></dd>
                                                                 
                             </dl>
                         </div>
