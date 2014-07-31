@@ -72,6 +72,15 @@ Route::group(array('before' => 'auth'), function()
     });
     
     /**
+     * Module Horaire
+     * @namespace T4KControllers\Horaire
+     */
+    Route::group(array('prefix' => 'horaire'), function()
+    {
+        Route::any('/',                     array('as' => 'portal.horaire.index',       'uses' => 'T4KControllers\Horaire\HoraireController@index'));
+    });
+    
+    /**
      * Module Users
      * @namespace T4KControllers\Users
      */
