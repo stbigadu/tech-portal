@@ -38,20 +38,6 @@
                 </div>
             </div>
             
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="btn-toolbar" role="toolbar">
-                        <div class="btn-group pull-right">
-                            <button class="btn btn-noborder disabled">
-                                <?php echo $ItemsCount; ?> évènement(s) au total.
-                                <i class="fa fa-files-o fa-fw"></i> Page(s) : 
-                            </button>
-                            <?php echo $past_events->links(); ?>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
             <?php if (count($current_events) > 0) : ?>
             <div class="row">
                 <div class="col-lg-12">
@@ -194,6 +180,19 @@
             <div class="row">
                 <div class="col-lg-12">
                     <p class="lead">Évènements antérieurs</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="btn-toolbar" role="toolbar">
+                        <div class="btn-group pull-right">
+                            <button class="btn btn-noborder disabled">
+                                <?php echo $ItemsCount; ?> évènement(s) au total.
+                                <i class="fa fa-files-o fa-fw"></i> Page(s) : 
+                            </button>
+                            <?php echo $past_events->links(); ?>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="row">
