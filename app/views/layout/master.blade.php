@@ -77,16 +77,16 @@
                             <li class="disabled"><a href="#"><i class="fa fa-briefcase fa-fw"></i> Tech Projets</a></li>
                             <li class="disabled"><a href="#"><i class="fa fa-automobile fa-fw"></i> Tech Parts</a></li>
                             <li class="disabled"><a href="#"><i class="fa fa-bug fa-fw"></i> Tech Incidents</a></li>
-                            <li class="disabled"><a href="#"><i class="fa fa-fw"></i> Tech Wiki</a></li>
-                            <li><a href="https://my.usfirst.org/stims/" target="_blank"><i class="fa fa-fw"></i> STIMS</a></li>
+                            <li class="disabled"><a href="#"><i class="fa fa-book fa-fw"></i> Tech Wiki</a></li>
+                            <li><a href="https://my.usfirst.org/stims/" target="_blank"><i class="fa fa-globe fa-fw"></i> STIMS</a></li>
                             <li class="divider"></li>
                             <li class="dropdown-header">Platforme</li>
-                            <li><a href="http://academy.team3990.com" target="_blank"><i class="fa fa-book fa-fw"></i> Tech Académie</a></li>
+                            <li><a href="http://academy.team3990.com" target="_blank"><i class="fa fa-graduation-cap fa-fw"></i> Tech Académie</a></li>
                             <li class="disabled"><a href="#"><i class="fa fa-flask fa-fw"></i> Tech Labo</a></li>
                             <li class="divider"></li>
                             <li class="dropdown-header no-wrap">Applications pour mentors et apprentis mentors</li>
                             <li><a href="http://courriel.team3990.com" target="_blank"><i class="fa fa-envelope fa-fw"></i> Tech Courriel</a></li>
-                            <li><a href="https://my.usfirst.org/frc/tims/site.lasso" target="_blank"><i class="fa fa-fw"></i> TIMS</a></li>
+                            <li><a href="https://my.usfirst.org/frc/tims/site.lasso" target="_blank"><i class="fa fa-globe fa-fw"></i> TIMS</a></li>
                         </ul>
                     </li>
                 </ul>
@@ -100,16 +100,16 @@
                             <li class="disabled"><a href="#"><i class="fa fa-briefcase fa-fw"></i> Tech Projets</a></li>
                             <li class="disabled"><a href="#"><i class="fa fa-automobile fa-fw"></i> Tech Parts</a></li>
                             <li class="disabled"><a href="#"><i class="fa fa-bug fa-fw"></i> Tech Incidents</a></li>
-                            <li class="disabled"><a href="#"><i class="fa fa-fw"></i> Tech Wiki</a></li>
-                            <li><a href="https://my.usfirst.org/stims/" target="_blank"><i class="fa fa-fw"></i> STIMS</a></li>
+                            <li class="disabled"><a href="#"><i class="fa fa-book fa-fw"></i> Tech Wiki</a></li>
+                            <li><a href="https://my.usfirst.org/stims/" target="_blank"><i class="fa fa-globe fa-fw"></i> STIMS</a></li>
                             <li class="divider"></li>
                             <li class="dropdown-header">Platforme</li>
-                            <li><a href="http://academy.team3990.com" target="_blank"><i class="fa fa-book fa-fw"></i> Tech Académie</a></li>
+                            <li><a href="http://academy.team3990.com" target="_blank"><i class="fa fa-graduation-cap fa-fw"></i> Tech Académie</a></li>
                             <li class="disabled"><a href="#"><i class="fa fa-flask fa-fw"></i> Tech Labo</a></li>
                             <li class="divider"></li>
                             <li class="dropdown-header no-wrap">Applications pour mentors et apprentis mentors</li>
                             <li><a href="http://courriel.team3990.com" target="_blank"><i class="fa fa-envelope fa-fw"></i> Tech Courriel</a></li>
-                            <li><a href="https://my.usfirst.org/frc/tims/site.lasso" target="_blank"><i class="fa fa-fw"></i> TIMS</a></li>
+                            <li><a href="https://my.usfirst.org/frc/tims/site.lasso" target="_blank"><i class="fa fa-globe fa-fw"></i> TIMS</a></li>
                         </ul>
                     </li>
                 </ul>
@@ -129,9 +129,8 @@
     @section('footer-content')
     <div class="container">
         <div class="row">
-            <div class="col-lg-12 text-muted text-center">
+            <div class="col-lg-12 text-muted text-center small">
             <hr />
-            <small>
                 Équipe Team 3990: Tech for Kids. 
                 <i class="fa fa-info-circle fa-fw"></i> Version 4.0.0 (20140609). <a href="#">Change Log</a>. 
                 <i class="fa fa-question-circle fa-fw"></i> Soutien technique: <a href="mailto:webmaster@team3990.com">webmaster@team3990.com</a>
@@ -144,7 +143,7 @@
                 <i class="fa fa-pinterest fa-fw"></i> pinterest.com/team3990 
                 <i class="fa fa-instagram fa-fw"></i> @team3990
                 <i class="fa fa-github fa-fw"></i> github.com/team3990
-            </small>
+            <hr />
             </div>
         </div>
     </div>

@@ -23,6 +23,7 @@ class DashboardController extends \BaseController {
     public function __construct() {
         $this->beforeFilter('csrf', array('on' => 'post'));
         $this->beforeFilter('auth');
+        setlocale(LC_ALL, 'fr_CA.UTF-8');
     }
     
     /**
@@ -31,9 +32,22 @@ class DashboardController extends \BaseController {
      */
 	public function index()
 	{
+	    // Retrieve upcoming events items
+	    $upcoming_events = \T4KModels\Event::upcoming()->get();
+	     
+	    // Retrieve current events items
+	    $current_events = \T4KModels\Event::current()->get();
+	    
+	    // Retrieve all news
+	    $articles = \T4KModels\Nouvelle::orderBy('datetime', 'desc')->paginate($this->ItemsPerPage);
+	    
 	    // Array of data to send to view
 	    $data = array(
-    	       'activeScreen'    => 'DashboardIndex' 
+	            'upcoming_events'   => $upcoming_events,
+	            'current_events'    => $current_events,
+                'articles'          => $articles,
+                'currentRoute'      => \Route::currentRouteName(),
+                'activeScreen'      => 'DashboardIndex' 
 	    );
 	    
 	    // Render view
