@@ -59,27 +59,65 @@
                 </div>
             </div>
             <div class="row">
-                <?php foreach ($current_events as $event) : ?>
                 <div class="col-lg-12">
-                    <div class="panel panel-default">
-                        <div class="panel-body">
-                            <div class="row">
-                                <div class="col-lg-4 col-md-4 col-sm-4 hidden-xs">
-                                    <a href="<?php echo route('portal.events.upcoming', array($event->id)); ?>">
-                                        <p class="list-group-item-subtitle small"><?php echo ($event->datetime_start == NULL) ? 'Aucune date.' : 'Le '.mb_strtolower(strftime('%A %e %B %Y', strtotime($event->datetime_start))).', de '.mb_strtolower(strftime('%kh%M', strtotime($event->datetime_start))).' à '.mb_strtolower(strftime('%kh%M', strtotime($event->datetime_end))); ?></p>
-                                        <p class="list-group-item-heading"><strong><?php echo strip_tags($event->title); ?></strong></p>
-                                        <p class="list-group-item-text small"><?php echo T4KHelpers::trunc_string(strip_tags($event->content), 100); ?></p>
-                                    </a>
-                                </div>
-                                <div class="col-lg-4 col-md-4 col-sm-4 hidden-xs"></div>
-                                <div class="col-lg-4 col-md-4 col-sm-4 hidden-xs"></div>
-                                <div class="col-xs-6 visible-xs"></div>
-                                <div class="col-xs-6 visible-xs"></div>
-                            </div>
-                        </div>
-                    </div>
+                    <table class="table table-condensed table-hover">
+                        <thead>
+                            <tr>
+                                <th colspan="2">Évènement</th>
+                                <th class="text-center" style="width: 200px">Heures d'ouverture</th>
+                                <th class="text-center" style="width: 300px">Mentor(s) présent(s)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($upcoming_events as $event) : ?>
+                            <tr>
+                                <td style="width: 50px"><i class="fa fa-calendar fa-fw fa-2x text-muted" style="margin-top: 5px"></i></td>
+                                <td>
+                                    <span class="small text-muted"><?php echo ($event->datetime_start == NULL) ? 'Aucune date.' : 'Le '.mb_strtolower(strftime('%A %e %B %Y', strtotime($event->datetime_start))).', de '.mb_strtolower(strftime('%kh%M', strtotime($event->datetime_start))).' à '.mb_strtolower(strftime('%kh%M', strtotime($event->datetime_end))); ?></span><br />
+                                    <strong><a href="<?php echo route('portal.events.past', array($event->id)); ?>"><?php echo strip_tags($event->title); ?></a></strong>
+                                </td>
+                                <td>
+                                    <?php 
+                                    $openingHour = $event->datetime_start;
+                                    $closingHour = $event->datetime_end;
+                                    foreach ($event->attendances as $attendance) 
+                                    {
+                                        if ($attendance->user->is_mentor && $attendance->is_attending)
+                                        {
+                                            if ($attendance->datetime_start < $openingHour)     $openingHour = $attendance->datetime_start;
+                                            if ($attendance->datetime_end > $closingHour)       $closingHour = $attendance->datetime_end;
+                                        }
+                                    }
+                                    ?>
+                                    <div class="clock">
+                                        <?php echo strftime('%k:%M', strtotime($openingHour)); ?>
+                                        <i class="fa fa-caret-right fa-fw"></i>
+                                        <?php echo strftime('%k:%M', strtotime($closingHour)); ?>
+                                    </div>
+                                </td>
+                                <td>
+                                    <?php foreach ($event->attendances as $attendance) : ?>
+                                    <?php if ($attendance->user->is_mentor && $attendance->is_attending) : ?>
+                                    <div class="row small text-muted">
+                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 text-right">
+                                            <?php echo $attendance->user->full_name; ?>
+                                        </div>
+                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                                            <div class="clock clock-small">
+                                                <?php echo strftime('%k:%M', strtotime($attendance->datetime_start)); ?>
+                                                <i class="fa fa-caret-right fa-fw"></i>
+                                                <?php echo strftime('%k:%M', strtotime($attendance->datetime_end)); ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <?php endif; ?>
+                                    <?php endforeach; ?>
+                                </td>
+                            </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
                 </div>
-                <?php endforeach; ?>
             </div>
             <?php endif; ?>
             
@@ -90,27 +128,65 @@
                 </div>
             </div>
             <div class="row">
-                <?php foreach ($upcoming_events as $event) : ?>
                 <div class="col-lg-12">
-                    <div class="panel panel-default">
-                        <div class="panel-body">
-                            <div class="row">
-                                <div class="col-lg-4 col-md-4 col-sm-4 hidden-xs">
-                                    <a href="<?php echo route('portal.events.upcoming', array($event->id)); ?>">
-                                        <p class="list-group-item-subtitle small"><?php echo ($event->datetime_start == NULL) ? 'Aucune date.' : 'Le '.mb_strtolower(strftime('%A %e %B %Y', strtotime($event->datetime_start))).', de '.mb_strtolower(strftime('%kh%M', strtotime($event->datetime_start))).' à '.mb_strtolower(strftime('%kh%M', strtotime($event->datetime_end))); ?></p>
-                                        <p class="list-group-item-heading"><strong><?php echo strip_tags($event->title); ?></strong></p>
-                                        <p class="list-group-item-text small"><?php echo T4KHelpers::trunc_string(strip_tags($event->content), 100); ?></p>
-                                    </a>
-                                </div>
-                                <div class="col-lg-4 col-md-4 col-sm-4 hidden-xs"></div>
-                                <div class="col-lg-4 col-md-4 col-sm-4 hidden-xs"></div>
-                                <div class="col-xs-6 visible-xs"></div>
-                                <div class="col-xs-6 visible-xs"></div>
-                            </div>
-                        </div>
-                    </div>
+                    <table class="table table-condensed table-hover">
+                        <thead>
+                            <tr>
+                                <th colspan="2">Évènement</th>
+                                <th class="text-center" style="width: 200px">Heures d'ouverture</th>
+                                <th class="text-center" style="width: 300px">Mentor(s) présent(s)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($upcoming_events as $event) : ?>
+                            <tr>
+                                <td style="width: 50px"><i class="fa fa-calendar fa-fw fa-2x text-muted" style="margin-top: 5px"></i></td>
+                                <td>
+                                    <span class="small text-muted"><?php echo ($event->datetime_start == NULL) ? 'Aucune date.' : 'Le '.mb_strtolower(strftime('%A %e %B %Y', strtotime($event->datetime_start))).', de '.mb_strtolower(strftime('%kh%M', strtotime($event->datetime_start))).' à '.mb_strtolower(strftime('%kh%M', strtotime($event->datetime_end))); ?></span><br />
+                                    <strong><a href="<?php echo route('portal.events.past', array($event->id)); ?>"><?php echo strip_tags($event->title); ?></a></strong>
+                                </td>
+                                <td>
+                                    <?php 
+                                    $openingHour = $event->datetime_start;
+                                    $closingHour = $event->datetime_end;
+                                    foreach ($event->attendances as $attendance) 
+                                    {
+                                        if ($attendance->user->is_mentor && $attendance->is_attending)
+                                        {
+                                            if ($attendance->datetime_start < $openingHour)     $openingHour = $attendance->datetime_start;
+                                            if ($attendance->datetime_end > $closingHour)       $closingHour = $attendance->datetime_end;
+                                        }
+                                    }
+                                    ?>
+                                    <div class="clock">
+                                        <?php echo strftime('%k:%M', strtotime($openingHour)); ?>
+                                        <i class="fa fa-caret-right fa-fw"></i>
+                                        <?php echo strftime('%k:%M', strtotime($closingHour)); ?>
+                                    </div>
+                                </td>
+                                <td>
+                                    <?php foreach ($event->attendances as $attendance) : ?>
+                                    <?php if ($attendance->user->is_mentor && $attendance->is_attending) : ?>
+                                    <div class="row small text-muted">
+                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 text-right">
+                                            <?php echo $attendance->user->full_name; ?>
+                                        </div>
+                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                                            <div class="clock clock-small">
+                                                <?php echo strftime('%k:%M', strtotime($attendance->datetime_start)); ?>
+                                                <i class="fa fa-caret-right fa-fw"></i>
+                                                <?php echo strftime('%k:%M', strtotime($attendance->datetime_end)); ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <?php endif; ?>
+                                    <?php endforeach; ?>
+                                </td>
+                            </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
                 </div>
-                <?php endforeach; ?>
             </div>
             <?php endif; ?>
             
@@ -122,37 +198,63 @@
             </div>
             <div class="row">
                 <div class="col-lg-12">
-                    
                     <table class="table table-condensed table-hover">
                         <thead>
                             <tr>
                                 <th colspan="2">Évènement</th>
-                                <th>Heures d'ouverture</th>
-                                <th>Mentor(s) présent(s)</th>
+                                <th class="text-center" style="width: 200px">Heures d'ouverture</th>
+                                <th class="text-center" style="width: 300px">Mentor(s) présent(s)</th>
                             </tr>
                         </thead>
                         <tbody>
                             <?php foreach ($past_events as $event) : ?>
                             <tr>
-                                <td style="vertical-align: middle"><i class="fa fa-calendar fa-fw fa-2x text-muted"></i></td>
-                                <td style="vertical-align: middle">
+                                <td style="width: 50px"><i class="fa fa-calendar fa-fw fa-2x text-muted" style="margin-top: 5px"></i></td>
+                                <td>
                                     <span class="small text-muted"><?php echo ($event->datetime_start == NULL) ? 'Aucune date.' : 'Le '.mb_strtolower(strftime('%A %e %B %Y', strtotime($event->datetime_start))).', de '.mb_strtolower(strftime('%kh%M', strtotime($event->datetime_start))).' à '.mb_strtolower(strftime('%kh%M', strtotime($event->datetime_end))); ?></span><br />
                                     <strong><a href="<?php echo route('portal.events.past', array($event->id)); ?>"><?php echo strip_tags($event->title); ?></a></strong>
                                 </td>
                                 <td>
+                                    <?php 
+                                    $openingHour = $event->datetime_start;
+                                    $closingHour = $event->datetime_end;
+                                    foreach ($event->attendances as $attendance) 
+                                    {
+                                        if ($attendance->user->is_mentor && $attendance->is_attending)
+                                        {
+                                            if ($attendance->datetime_start < $openingHour)     $openingHour = $attendance->datetime_start;
+                                            if ($attendance->datetime_end > $closingHour)       $closingHour = $attendance->datetime_end;
+                                        }
+                                    }
+                                    ?>
                                     <div class="clock">
-                                        <?php echo strftime('%k:%M', strtotime($event->datetime_start)); ?>
+                                        <?php echo strftime('%k:%M', strtotime($openingHour)); ?>
                                         <i class="fa fa-caret-right fa-fw"></i>
-                                        <?php echo strftime('%k:%M', strtotime($event->datetime_end)); ?>
+                                        <?php echo strftime('%k:%M', strtotime($closingHour)); ?>
                                     </div>
                                 </td>
                                 <td>
+                                    <?php foreach ($event->attendances as $attendance) : ?>
+                                    <?php if ($attendance->user->is_mentor && $attendance->is_attending) : ?>
+                                    <div class="row small text-muted">
+                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 text-right">
+                                            <?php echo $attendance->user->full_name; ?>
+                                        </div>
+                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                                            <div class="clock clock-small">
+                                                <?php echo strftime('%k:%M', strtotime($attendance->datetime_start)); ?>
+                                                <i class="fa fa-caret-right fa-fw"></i>
+                                                <?php echo strftime('%k:%M', strtotime($attendance->datetime_end)); ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <?php endif; ?>
+                                    <?php endforeach; ?>
                                 </td>
                             </tr>
                             <?php endforeach; ?>
                         </tbody>
                     </table>
-                    
                 </div>
             </div>
             <?php endif; ?>

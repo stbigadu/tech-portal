@@ -72,7 +72,7 @@ class Event extends \Eloquent
     
     /**
      * Relationship to User model.
-     * @return Eloquent Scope
+     * @return Eloquent Relationship
      */
     public function user()
     {
@@ -81,7 +81,7 @@ class Event extends \Eloquent
     
     /**
      * Relationship to EventPresence model.
-     * @return Eloquent Scope
+     * @return Eloquent Relationship
      */
     public function attendances()
     {
