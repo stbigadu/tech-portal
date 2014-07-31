@@ -207,43 +207,19 @@ class UsersController extends \BaseController
 	 */
 	public function update_info()
 	{
-	    // Validation rules
-	    $rules = array(
-	            'old_password'              => 'required|passcheck',
-	            'new_password'              => 'required|confirmed|between:6,25',
-	    );
-	    $messages = array(
-	            'old_password.required'     => 'Le mot de passe actuel est requis.',
-	            'new_password.required'     => 'Veuillez entrer un nouveau mot de passe.',
-	            'new_password.between'      => 'Le nouveau mot de passe doit contenir entre :min et :max caractères.',
-	            'new_password.confirmed'    => 'Le nouveau mot de passe a été mal indiqué. Veuillez essayer à nouveau.',
-	            'passcheck'                 => 'Le mot de passe actuel n\'est pas valide.'
-	    );
-	    // Password validation
-	    Validator::extend('passcheck', function ($attribute, $value, $parameters)
-	    {
-	        return Hash::check($value, Auth::user()->getAuthPassword());
-	    });
-	    
-	    $validator = Validator::make(Input::all(), $rules, $messages);
-	    
-	    // Validator check
-	    if ($validator->fails())
-	    {
-	        // Throw error and redirect to previous screen
-	        return Redirect::route('portal.users.edit.info')->withErrors($validator)->withInput();
-	    }
-	    else
-	    {
-	        // Update user information
-	        $user = \T4KModels\User::find(Auth::user()->id);
-	        $user->password = Hash::make(Input::get('new_password'));
-	        $user->save();
-	    
-	        // Redirect to view screen with success message
-	        Session::flash('update_info', true);
-	        return Redirect::route('portal.users.profile');
-	    }
+        // Update user information
+        $user = \T4KModels\User::find(Auth::user()->id);
+        if (Auth::user()->is_mentor || Auth::user()->is_junior_mentor) $user->professional_title = Input::get('professional_title');
+        $user->email            = Input::get('email');
+        $user->cellphone_number = Input::get('cellphone_number');
+        $user->home_number_1    = Input::get('home_number_1');
+        $user->home_number_2    = Input::get('home_number_2');
+        $user->other_number     = Input::get('other_number');
+        $user->save();
+    
+        // Redirect to view screen with success message
+        Session::flash('update_info', true);
+        return Redirect::route('portal.users.profile');
 	}
 
 	/**
