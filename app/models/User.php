@@ -120,16 +120,65 @@ class User extends \Eloquent implements UserInterface, RemindableInterface
     
     /**
      * Relationship to Nouvelle model.
-     * @return array
+     * @return Eloquent Relationship
      */
     public function nouvelles()
     {
         return $this->hasMany('\T4KModels\Nouvelle');
     }
     
+    /**
+     * Relationship to UserRole model.
+     * @return Eloquent Relationship
+     */
     public function role()
     {
         return $this->belongsTo('\T4KModels\UserRole', 'user_role_id', 'id');
+    }
+    
+    /**
+     * Attribute: is user a mentor? 
+     * @return boolean
+     */
+    public function getIsMentorAttribute()
+    {
+        return ($this->role->title == "Mentor") ? true : false;
+    }
+    
+    /**
+     * Attribute: is user a student?
+     * @return boolean
+     */
+    public function getIsStudentAttribute()
+    {
+        return ($this->role->title == "Élève") ? true : false;
+    }
+    
+    /**
+     * Attribute: is user a junior mentor?
+     * @return boolean
+     */
+    public function getIsJuniorMentorAttribute()
+    {
+        return ($this->role->title == "Apprenti(e) mentor") ? true : false;
+    }
+    
+    /**
+     * Attribute: is user a parent?
+     * @return boolean
+     */
+    public function getIsParentAttribute()
+    {
+        return ($this->role->title == "Parent") ? true : false;
+    }
+    
+    /**
+     * Attribute: is user an other type of user?
+     * @return boolean
+     */
+    public function getIsOtherAttribute()
+    {
+        return ($this->role->title == "Autre") ? true : false;
     }
 
 }
