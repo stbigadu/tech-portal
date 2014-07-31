@@ -70,7 +70,7 @@
                                     </thead>
                                     <tbody>
                                         <?php foreach ($users as $user) : ?>
-                                        <?php if ($user->role->id == $UserRole['STUDENT']) : ?>
+                                        <?php if ($user->is_student) : ?>
                                         <tr>
                                             <td><?php echo $user->last_name; ?></td>
                                             <td><?php echo $user->first_name; ?></td>
@@ -103,7 +103,7 @@
                                     </thead>
                                     <tbody>
                                         <?php foreach ($users as $user) : ?>
-                                        <?php if ($user->role->id == $UserRole['MENTOR'] || $user->role->id == $UserRole['JMENTOR']) : ?>
+                                        <?php if ($user->is_mentor || $user->is_junior_mentor) : ?>
                                         <tr>
                                             <td><?php echo $user->last_name; ?></td>
                                             <td><?php echo $user->first_name; ?></td>
@@ -136,7 +136,7 @@
                                     </thead>
                                     <tbody>
                                         <?php foreach ($users as $user) : ?>
-                                        <?php if ($user->role->id == $UserRole['PARENT']) : ?>
+                                        <?php if ($user->is_parent) : ?>
                                         <tr>
                                             <td><?php echo $user->last_name; ?></td>
                                             <td><?php echo $user->first_name; ?></td>
