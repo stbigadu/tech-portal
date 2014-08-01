@@ -98,6 +98,10 @@ dd {
 	border-top-left-radius: 0;
 	border-top-right-radius: 0;
 }
+.active-warning, .active-warning>a {
+	background: #ec971f !important;
+	border-color: #ec971f !important;
+}
 
 /* ***************************************************************************
  * Module Horaire

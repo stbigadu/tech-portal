@@ -44,7 +44,7 @@ class UsersController extends \BaseController
 	{
 	    if (Auth::attempt(array('email' => Input::get('email'), 'password' => Input::get('password')))) 
 	    {
-	        return Redirect::intended('/');
+	        return Redirect::intended(route('portal.dashboard.index'));
 	    } 
 	    else 
 	    {

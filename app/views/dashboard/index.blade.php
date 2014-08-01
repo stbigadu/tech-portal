@@ -211,7 +211,7 @@
                 <div class="col-lg-2">
                     <div class="panel panel-default">
                         <div class="panel-body text-center">
-                            <a href="/" class="btn disabled"><i class="fa fa-car fa-fw fa-3x"></i><br />Tech Parts</a>
+                            <a href="/" class="btn disabled"><i class="fa fa-cog fa-fw fa-3x"></i><br />Tech Parts</a>
                         </div>
                     </div>
                 </div>

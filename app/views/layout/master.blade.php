@@ -73,11 +73,11 @@
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-th fa-fw"></i> <i class="fa fa-caret-down fa-fw"></i></a>
                         <ul class="dropdown-menu">
                             <li class="dropdown-header">Applications pour élèves et mentors</li>
-                            <li><a href="#"><i class="fa fa-cube fa-fw"></i> Tech Portail</a></li>
+                            <li><a href="http://portail.team3990.com" target="_blank"><i class="fa fa-cube fa-fw"></i> Tech Portail</a></li>
                             <li class="disabled"><a href="#"><i class="fa fa-briefcase fa-fw"></i> Tech Projets</a></li>
-                            <li class="disabled"><a href="#"><i class="fa fa-automobile fa-fw"></i> Tech Parts</a></li>
+                            <li class="disabled"><a href="#"><i class="fa fa-cog fa-fw"></i> Tech Parts</a></li>
                             <li class="disabled"><a href="#"><i class="fa fa-bug fa-fw"></i> Tech Incidents</a></li>
-                            <li class="disabled"><a href="#"><i class="fa fa-book fa-fw"></i> Tech Wiki</a></li>
+                            <li><a href="http://wiki.team3990.com" target="_blank"><i class="fa fa-book fa-fw"></i> Tech Wiki</a></li>
                             <li><a href="https://my.usfirst.org/stims/" target="_blank"><i class="fa fa-globe fa-fw"></i> STIMS</a></li>
                             <li class="divider"></li>
                             <li class="dropdown-header">Platforme</li>
@@ -96,11 +96,11 @@
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-th fa-fw"></i> Autres applications <i class="fa fa-caret-down fa-fw"></i></a>
                         <ul class="dropdown-menu">
                             <li class="dropdown-header">Applications pour élèves et mentors</li>
-                            <li><a href="#"><i class="fa fa-cube fa-fw"></i> Tech Portail</a></li>
+                            <li><a href="http://portail.team3990.com"><i class="fa fa-cube fa-fw"></i> Tech Portail</a></li>
                             <li class="disabled"><a href="#"><i class="fa fa-briefcase fa-fw"></i> Tech Projets</a></li>
-                            <li class="disabled"><a href="#"><i class="fa fa-automobile fa-fw"></i> Tech Parts</a></li>
+                            <li class="disabled"><a href="#"><i class="fa fa-cog fa-fw"></i> Tech Parts</a></li>
                             <li class="disabled"><a href="#"><i class="fa fa-bug fa-fw"></i> Tech Incidents</a></li>
-                            <li class="disabled"><a href="#"><i class="fa fa-book fa-fw"></i> Tech Wiki</a></li>
+                            <li><a href="http://wiki.team3990.com"><i class="fa fa-book fa-fw"></i> Tech Wiki</a></li>
                             <li><a href="https://my.usfirst.org/stims/" target="_blank"><i class="fa fa-globe fa-fw"></i> STIMS</a></li>
                             <li class="divider"></li>
                             <li class="dropdown-header">Platforme</li>
