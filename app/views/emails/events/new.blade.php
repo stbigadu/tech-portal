@@ -19,9 +19,9 @@
                     <p>Bonjour <?php echo $user->first_name; ?>!</p>
                     <p>On vous demande de confirmer votre présence pour: </p>
                     <p><strong><?php echo $event->title; ?></strong><br />
-                    le <?php echo $event->datetime_start; ?>, de <?php echo $event->datetime_start; ?> à <?php echo $event->datetime_end; ?></p>
+                    le <?php echo mb_strtolower(strftime('%A %e %B %Y, de %H h %M', strtotime($event->datetime_start))); ?> à <?php echo mb_strtolower(strftime('%H h %M', strtotime($event->datetime_end))); ?></p>
                     <p>Cliquez ici pour confirmer votre présence à la rencontre:</p>
-                    <p></p>
+                    <p><a href="<?php echo $link; ?>" target="_blank"><?php echo $link; ?></a></p>
                     <p style="color:#F00"><strong> Il est très important de confirmer sa présence en cliquant sur le lien ci-dessus. </strong></p>
                     <p>Merci!</p>
                 </td>

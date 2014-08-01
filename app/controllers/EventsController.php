@@ -135,25 +135,31 @@ class EventsController extends \BaseController {
 	        $event->save();
 	        $event = \T4KModels\Event::find($event->id);
 	        
-	        // Send email
+	        // Send email: preparing data
 	        $mail_subject = $event->title.', le '.mb_strtolower(strftime('%A %e %B %Y, de %H h %M', strtotime($event->datetime_start))).' à '.mb_strtolower(strftime('%H h %M', strtotime($event->datetime_end)));
 	        $users = \T4KModels\User::where('id', 3)->get();
+    	    $link = (Input::get('datetime_end') >= date('Y-m-d H:i:s')) ? route('portal.events.upcoming', $event->id) : $link = route('portal.events.past', $event->id);
 	        
+	        // Sending email to each user
 	        foreach ($users as $user)
 	        {
-	            // Array of data to send to email
-	            $data = array(
-	                    'event'        => $event,
-	                    'user'         => $user
-	            );
-	            
-	            // Sending mail
-    	        Mail::send('emails.events.new', $data, function($message) use ($user, $mail_subject)
-    	        {
-    	            $message->from('no-reply@team3990.com', 'Équipe Team 3990: Tech for Kids');
-    	            $message->to($user->email, $user->full_name);
-    	            $message->subject($mail_subject);
-    	        });
+	            if ($user->is_mentor || $user->is_junior_mentor || $user->is_student)
+	            {
+    	            // Array of data to send to email
+    	            $data = array(
+    	                    'event'        => $event,
+    	                    'user'         => $user,
+    	                    'link'         => $link
+    	            );
+    	            
+    	            // Sending mail
+        	        Mail::send('emails.events.new', $data, function($message) use ($user, $mail_subject)
+        	        {
+        	            $message->from('no-reply@team3990.com', 'Equipe Team 3990: Tech for Kids');
+        	            $message->to($user->email);
+        	            $message->subject($mail_subject);
+        	        });
+	            }
 	        }
 	
 	        // Redirect to view screen with success message

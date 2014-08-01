@@ -44,11 +44,11 @@ class UsersController extends \BaseController
 	{
 	    if (Auth::attempt(array('email' => Input::get('email'), 'password' => Input::get('password')))) 
 	    {
-	        return Redirect::route('portal.dashboard.index')->with('message', 'Connexion réussie.');
+	        return Redirect::intended('/');
 	    } 
 	    else 
 	    {
-	        return Redirect::route('portal.users.login')->with('message', 'Le nom d\'utilisateur ou le mot de passe est incorrect. Veuillez réessayer à nouveau.')->withInput();
+	        return Redirect::route('portal.users.login')->with('authenticated', false)->withInput();
 	    }
 	}
 	

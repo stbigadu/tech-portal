@@ -41,14 +41,10 @@
                         
                         <p>Pour continuer sur <strong>Tech Portail</strong>, veuillez vous connecter.</p>
                         
-                        <?php if(Session::has('message')) : ?>
+                        <?php if(Session::has('authenticated')) : ?>
                             <div class="alert alert-danger">
-                                <p><?php echo Session::get('message') ?></p>
-                                <ul>
-                                    <?php foreach ($errors->all() as $error) : ?>
-                                        <li>{{ $error }}</li>
-                                    <?php endforeach; ?>
-                                </ul>
+                                <i class="fa fa-exclamation-circle fa-fw fa-2x pull-left"></i>
+                                <div style="margin-left: 50px">Le nom d'utilisateur ou le mot de passe est incorrect. Veuillez réessayer à nouveau.</div>
                             </div>
                         <?php endif; ?>
                 
