@@ -138,12 +138,12 @@
                     </div>
                     <?php endif; ?>
                     
-                    <?php if (count($upcoming_events) > 0) : ?>
                     <div class="panel panel-default">
                         <div class="panel-heading">
                             <h3 class="panel-title">Heures d'ouverture de Tech Atelier</h3>
                         </div>
                         
+                        <?php if (count($upcoming_events) > 0) : ?>
                         <table class="table table-hover">
                             <tbody>
                             <?php foreach ($upcoming_events as $event) : ?>
@@ -175,13 +175,17 @@
                             <?php endforeach; ?>
                             </tbody>
                         </table>
-                        
+                        <?php else : ?>
+                            <div class="panel-body">
+                                <div class="alert alert-warning text-center">Aucune heure d'ouverture à venir.</div>
+                            </div>
+                        <?php endif; ?>
                         <div class="panel-footer text-center">
                             <a href="<?php echo route('portal.horaire.index'); ?>" class="btn btn-default">Voir l'horaire complet <i class="fa fa-chevron-circle-right fa-fw"></i></a>
                         </div>
                         
                     </div>
-                    <?php endif; ?>
+                    
                 </div>
                 
             </div>
