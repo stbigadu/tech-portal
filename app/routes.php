@@ -20,6 +20,12 @@ Route::group(array('prefix' => 'users'), function()
     // Login screen.
     Route::any('login',         array('as' => 'portal.users.login',         'uses' => 'T4KControllers\Users\UsersController@login'));
     Route::any('connecting',    array('as' => 'portal.users.connecting',    'uses' => 'T4KControllers\Users\UsersController@connecting'));
+    
+    // Password reset
+    Route::any('oubli',         array('as' => 'portal.users.getremind',     'uses' => 'T4KControllers\Users\RemindersController@getRemind'));
+    Route::any('oubli/post',    array('as' => 'portal.users.postremind',    'uses' => 'T4KControllers\Users\RemindersController@postRemind'));
+    Route::any('reset/{token}', array('as' => 'portal.users.getreset',      'uses' => 'T4KControllers\Users\RemindersController@getReset'));
+    Route::any('save',          array('as' => 'portal.users.postreset',     'uses' => 'T4KControllers\Users\RemindersController@postReset'));
 
     // Initial administrator setup page
     Route::any('setup',         array('as' => 'portal.users.setup',         'uses' => 'T4KControllers\Users\UsersController@setup'));

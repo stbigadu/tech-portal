@@ -3,11 +3,13 @@
 namespace T4KControllers\Users;
 
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\View;
 
 /**
  * T4KControllers\Users\UsersController class
@@ -24,7 +26,7 @@ class UsersController extends \BaseController
      * Constructor
      */
     public function __construct() {
-        $this->beforeFilter('csrf', array('on'=>'post'));
+        // $this->beforeFilter('csrf', array('on'=>'post'));
     }
     
     /**

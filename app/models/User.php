@@ -46,6 +46,11 @@ class User extends \Eloquent implements UserInterface, RemindableInterface
      * Enable model soft deleting functionality.
      */
     use \SoftDeletingTrait;
+    
+    /**
+     * Enable password reset functionality.
+     */
+    use \Illuminate\Auth\Reminders\RemindableTrait;
 
     /**
      * The attributes excluded from the model's JSON form.

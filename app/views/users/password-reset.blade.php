@@ -35,43 +35,44 @@
                 </div>
     
                 <div class="col-lg-4 col-md-4">
-                    <?php echo Form::open(array('route' => 'portal.users.connecting', 'class' => 'form_signin')) ?>
+                    <?php echo Form::open(array('route' => 'portal.users.postreset', 'class' => 'form_signin')) ?>
                     
-                        <h2 class="form-signin-heading login-heading">Se connecter</h2>
+                        <?php echo Form::hidden('token', $token); ?>
+                    
+                        <h2 class="form-signin-heading login-heading">Réinitialiser votre mot de passe</h2>
                         
-                        <p>Pour continuer sur <strong>Tech Portail</strong>, veuillez vous connecter.</p>
+                        <p>Veuillez remplir les champs suivants pour réinitialiser votre mot de passe.</p>
                         
-                        <?php if(Session::has('authenticated')) : ?>
+                        <?php if(Session::has('error')) : ?>
                             <div class="alert alert-danger">
                                 <i class="fa fa-exclamation-circle fa-fw fa-2x pull-left"></i>
-                                <div style="margin-left: 50px">Le nom d'utilisateur ou le mot de passe est incorrect. Veuillez réessayer à nouveau.</div>
+                                <div style="margin-left: 50px">Le courriel ou le mot de passe est invalide. Veuillez réessayer à nouveau.</div>
                             </div>
                         <?php endif; ?>
                         
-                        <?php if(Session::has('reset')) : ?>
-                            <div class="alert alert-success">
-                                <i class="fa fa-check-circle fa-fw fa-2x pull-left"></i>
-                                <div style="margin-left: 50px">Le mot de passe a été réinitialisé. Veuillez vous connecter.</div>
+                        <?php if ($errors->count() > 0) : ?>
+                            <div class="alert alert-danger">
+                                <i class="fa fa-exclamation-circle fa-fw fa-2x pull-left"></i>
+                                <div style="margin-left: 50px"><?php echo HTML::ul($errors->all()); ?></div>
                             </div>
                         <?php endif; ?>
-                
+                        
                         <div class="input-group" style="margin-bottom: 10px">
                             <span class="input-group-addon"><i class="fa fa-user fa-fw"></i></span>
                             <?php echo Form::text('email', null, array('class' => 'form-control', 'placeholder' => 'Courriel', 'id' => 'email')); ?>
                         </div>
                         
-                        <div class="input-group">
+                        <div class="input-group" style="margin-bottom: 10px">
                             <span class="input-group-addon"><i class="fa fa-lock fa-fw"></i></span>
-                            <?php echo Form::password('password', array('class' => 'form-control', 'placeholder' => 'Mot de passe', 'id' => 'password')); ?>
+                            <?php echo Form::password('password', array('class' => 'form-control', 'placeholder' => 'Nouveau mot de passe', 'id' => 'password')); ?>
                         </div>
                         
-                        <label class="checkbox">
-                            <input type="checkbox" value="remember-me" /> Se souvenir de moi sur cet ordinateur
-                        </label>
+                        <div class="input-group" style="margin-bottom: 10px">
+                            <span class="input-group-addon"><i class="fa fa-lock fa-fw"></i></span>
+                            <?php echo Form::password('password_confirmation', array('class' => 'form-control', 'placeholder' => 'Confirmer le nouveau mot de passe', 'id' => 'password_confirmation')); ?>
+                        </div>
                         
-                        <p><button class="btn btn-t4k" type="submit">Connexion <i class="fa fa-chevron-circle-right fa-fw"></i></button></p>
-                        
-                        <p><a href="<?php echo route('portal.users.getremind'); ?>">J'ai oublié mon mot de passe</a></p>
+                        <p><button class="btn btn-t4k" type="submit">Réinitialiser le mot de passe <i class="fa fa-chevron-circle-right fa-fw"></i></button></p>
                         
                     <?php echo Form::close(); ?>
                     
