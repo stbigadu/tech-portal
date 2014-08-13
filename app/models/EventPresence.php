@@ -54,7 +54,7 @@ class EventPresence extends \Eloquent
      */
     public function user()
     {
-        return $this->belongsTo('\T4KModels\User', 'user_id', 'id');
+        return $this->belongsTo('\T4KModels\User', 'user_id', 'id')->withTrashed();
     }
     
 }

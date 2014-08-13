@@ -76,7 +76,7 @@ class Event extends \Eloquent
      */
     public function user()
     {
-        return $this->belongsTo('\T4KModels\User');
+        return $this->belongsTo('\T4KModels\User')->withTrashed();
     }
     
     /**

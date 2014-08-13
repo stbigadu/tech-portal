@@ -42,13 +42,13 @@
                 <div class="col-lg-12">
                     <div class="btn-toolbar" role="toolbar">
                     
-                        <?php if (Auth::user()->is_admin) : ?>
+                        <?php if (Auth::user()->is_mentor || Auth::user()->is_junior_mentor) : ?>
                         <div class="btn-group">
                             <a href="<?php echo route('portal.events.create', array('page' => Input::get('page'))); ?>" class="btn btn-default"><i class="fa fa-plus fa-fw"></i> Ajouter un évènement</a>
                         </div>
                         <?php endif; ?>
                         
-                        <?php if (isset($event) && Auth::user()->is_admin) : ?>
+                        <?php if ($event != NULL && Auth::user()->is_mentor || Auth::user()->is_junior_mentor) : ?>
                         <div class="btn-group">
                             <a href="<?php echo route('portal.events.edit', array($event->id, 'page' => Input::get('page'), 'view' => $currentRoute)); ?>" class="btn btn-default"><i class="fa fa-pencil fa-fw"></i> Modifier l'évènement</a>
                         </div>
@@ -125,7 +125,7 @@
                         <li<?php echo ($currentRoute == 'portal.events.upcoming' || $currentRoute == 'portal.events.index') ? ' class="active"' : ''; ?>><a href="<?php echo route('portal.events.upcoming'); ?>">À venir</a></li>
                         <li<?php echo ($currentRoute == 'portal.events.past') ? ' class="active"' : ''; ?>><a href="<?php echo route('portal.events.past'); ?>">Passés</a></li>
                     </ul>
-
+                    
                     {{-- Past events ***************************************************************************************************************** --}}
                     <?php if ($currentRoute == 'portal.events.past') : ?>
                     <div class="panel panel-default panel-tabs">
@@ -417,7 +417,6 @@
                                             
                     </div>
                     <?php endif; ?>
-                    
                 <?php endif; ?>
             </div>
         @stop
