@@ -77,7 +77,6 @@
                             <li class="disabled"><a href="#"><i class="fa fa-briefcase fa-fw"></i> Tech Projets</a></li>
                             <li class="disabled"><a href="#"><i class="fa fa-cog fa-fw"></i> Tech Parts</a></li>
                             <li class="disabled"><a href="#"><i class="fa fa-bug fa-fw"></i> Tech Incidents</a></li>
-                            <li><a href="http://wiki.team3990.com" target="_blank"><i class="fa fa-book fa-fw"></i> Tech Wiki</a></li>
                             <li><a href="https://my.usfirst.org/stims/" target="_blank"><i class="fa fa-globe fa-fw"></i> STIMS</a></li>
                             <li class="divider"></li>
                             <li class="dropdown-header">Platforme</li>
@@ -100,7 +99,6 @@
                             <li class="disabled"><a href="#"><i class="fa fa-briefcase fa-fw"></i> Tech Projets</a></li>
                             <li class="disabled"><a href="#"><i class="fa fa-cog fa-fw"></i> Tech Parts</a></li>
                             <li class="disabled"><a href="#"><i class="fa fa-bug fa-fw"></i> Tech Incidents</a></li>
-                            <li><a href="http://wiki.team3990.com"><i class="fa fa-book fa-fw"></i> Tech Wiki</a></li>
                             <li><a href="https://my.usfirst.org/stims/" target="_blank"><i class="fa fa-globe fa-fw"></i> STIMS</a></li>
                             <li class="divider"></li>
                             <li class="dropdown-header">Platforme</li>
