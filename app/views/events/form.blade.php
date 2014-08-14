@@ -43,7 +43,7 @@
                 </div>
             </div>
             
-            <?php if (Auth::user()->Auth::user()->is_mentor || Auth::user()->is_junior_mentor) : ?>
+            <?php if (Auth::user()->is_mentor || Auth::user()->is_junior_mentor) : ?>
             
                 <?php if ($errors->count() > 0) : ?>
                     <div class="alert alert-danger alert-dismissable fade in">

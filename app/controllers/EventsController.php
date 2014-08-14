@@ -137,7 +137,7 @@ class EventsController extends \BaseController {
 	        
 	        // Send email: preparing data
 	        $mail_subject = $event->title.', le '.mb_strtolower(strftime('%A %e %B %Y, de %H h %M', strtotime($event->datetime_start))).' à '.mb_strtolower(strftime('%H h %M', strtotime($event->datetime_end)));
-	        $users = \T4KModels\User::where('id', 3)->get();
+	        $users = \T4KModels\User::get();
     	    $link = (Input::get('datetime_end') >= date('Y-m-d H:i:s')) ? route('portal.events.upcoming', $event->id) : $link = route('portal.events.past', $event->id);
 	        
 	        // Sending email to each user
