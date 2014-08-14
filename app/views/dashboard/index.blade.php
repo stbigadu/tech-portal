@@ -26,14 +26,14 @@
     
         @section('content')
             <div class="row">
-                <div class="col-lg-12">
+                <div class="col-xs-12">
                     <div class="page-header"><h1><i class="fa fa-dashboard fa-fw"></i> Bonjour <?php echo Auth::user()->first_name; ?>! <small>Dernières activités sur Tech Portail</small></h1></div>
                 </div>
             </div>
             
             <div class="row">
             
-                <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                <div class="col-sm-4 col-xs-12">
                     <?php if (count($current_events) > 0) : ?>
                     <div class="panel panel-default">
                         <div class="panel-heading">
@@ -76,10 +76,10 @@
                     </div>
                 </div>
                 
-                <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                <div class="col-sm-4 col-xs-12">
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            <h3 class="panel-title">Dernières nouvelles</h3>
+                            <h3 class="panel-title"><i class="fa fa-bullhorn fa-fw"></i> Dernières nouvelles</h3>
                         </div>
                         <div class="list-group">
                             <?php foreach ($articles as $a) : ?>
@@ -96,11 +96,11 @@
                     </div>
                 </div>
                 
-                <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                <div class="col-sm-4 col-xs-12">
                     <?php if (count($current_events) > 0) : ?>
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            <h3 class="panel-title">Tech Atelier ouvert en ce moment</h3>
+                            <h3 class="panel-title"><i class="fa fa-clock-o fa-fw"></i> Tech Atelier ouvert en ce moment</h3>
                         </div>
                         
                         <table class="table table-hover">
@@ -140,7 +140,7 @@
                     
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            <h3 class="panel-title">Heures d'ouverture de Tech Atelier</h3>
+                            <h3 class="panel-title"><i class="fa fa-clock-o fa-fw"></i> Heures d'ouverture de Tech Atelier</h3>
                         </div>
                         
                         <?php if (count($upcoming_events) > 0) : ?>
@@ -198,63 +198,56 @@
                 </div>
             </div>
             <div class="row hidden-xs">
-                <div class="col-lg-2">
+                <div class="col-md-2 col-sm-3">
                     <div class="panel panel-default">
                         <div class="panel-body text-center">
                             <a href="/" class="btn"><i class="fa fa-cube fa-fw fa-3x"></i><br />Tech Portail</a>
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-2">
+                <div class="col-md-2 col-sm-3">
                     <div class="panel panel-default">
                         <div class="panel-body text-center">
                             <a href="/" class="btn disabled"><i class="fa fa-briefcase fa-fw fa-3x"></i><br />Tech Projets</a>
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-2">
+                <div class="col-md-2 col-sm-3">
                     <div class="panel panel-default">
                         <div class="panel-body text-center">
                             <a href="/" class="btn disabled"><i class="fa fa-cog fa-fw fa-3x"></i><br />Tech Parts</a>
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-2">
+                <div class="col-md-2 col-sm-3">
                     <div class="panel panel-default">
                         <div class="panel-body text-center">
                             <a href="/" class="btn disabled"><i class="fa fa-bug fa-fw fa-3x"></i><br />Tech Incidents</a>
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-2">
-                    <div class="panel panel-default">
-                        <div class="panel-body text-center">
-                            <a href="http://wiki.team3990.com" target="_blank" class="btn"><i class="fa fa-book fa-fw fa-3x"></i><br />Tech Wiki</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-2">
+                <div class="col-md-2 col-sm-3">
                     <div class="panel panel-default">
                         <div class="panel-body text-center">
                             <a href="http://academy.team3990.com" target="_blank" class="btn"><i class="fa fa-graduation-cap fa-fw fa-3x"></i><br />Tech Academy</a>
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-2">
+                <div class="col-md-2 col-sm-3">
                     <div class="panel panel-default">
                         <div class="panel-body text-center">
                             <a href="http://courriel.team3990.com" target="_blank" class="btn"><i class="fa fa-envelope fa-fw fa-3x"></i><br />Tech Courriel</a>
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-2">
+                <div class="col-md-2 col-sm-3">
                     <div class="panel panel-default">
                         <div class="panel-body text-center">
                             <a href="https://my.usfirst.org/frc/tims/site.lasso" target="_blank" class="btn"><i class="fa fa-globe fa-fw fa-3x"></i><br />TIMS</a>
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-2">
+                <div class="col-md-2 col-sm-3">
                     <div class="panel panel-default">
                         <div class="panel-body text-center">
                             <a href="https://my.usfirst.org/stims/" target="_blank" class="btn"><i class="fa fa-globe fa-fw fa-3x"></i><br />STIMS</a>
