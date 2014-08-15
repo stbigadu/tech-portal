@@ -28,7 +28,7 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="page-header">
-                        <h1><i class="fa fa-bullhorn fa-fw"></i> Équipe <small>Tous les utilisateurs</small></h1>
+                        <h1><i class="fa fa-users fa-fw"></i> Équipe <small>Tous les utilisateurs</small></h1>
                     </div>
                 </div>
             </div>
