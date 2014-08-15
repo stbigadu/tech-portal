@@ -57,6 +57,7 @@
                 <?php if (Auth::check()) : ?>
                 <ul class="nav navbar-nav">
                     <li<?php echo (@$activeScreen == 'NouvellesIndex') ? ' class="active"' : ''; ?>><a href="<?php echo route('portal.nouvelles.index'); ?>"><i class="fa fa-bullhorn fa-fw"></i> Nouvelles</a></li>
+                    <li<?php echo (@$activeScreen == 'DocumentsIndex') ? ' class="active"' : ''; ?>><a href="<?php echo route('portal.docs.index'); ?>"><i class="fa fa-file fa-fw"></i> Documents</a></li>
                     <li<?php echo (@$activeScreen == 'EventsIndex') ? ' class="active"' : ''; ?>><a href="<?php echo route('portal.events.index'); ?>"><i class="fa fa-calendar fa-fw"></i> Calendrier</a></li>
                     <li<?php echo (@$activeScreen == 'HoraireIndex') ? ' class="active"' : ''; ?>><a href="<?php echo route('portal.horaire.index'); ?>"><i class="fa fa-clock-o fa-fw"></i> Horaire</a></li>
                     <li<?php echo (@$activeScreen == 'UsersIndex') ? ' class="active"' : ''; ?>><a href="<?php echo route('portal.users.index'); ?>"><i class="fa fa-users fa-fw"></i> Équipe</a></li>

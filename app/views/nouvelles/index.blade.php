@@ -177,8 +177,6 @@
                         </ul>
                         <?php endif; ?>
                     </div>
-                    
-                    <pre><?php print_r(Session::get('files')); ?></pre>
                 
                 </div>
                 <?php endif; ?>

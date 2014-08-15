@@ -78,6 +78,20 @@ Route::group(array('before' => 'auth'), function()
     });
     
     /**
+     * Module Documents
+     * @namespace T4KControllers\Documents
+     */
+    Route::group(array('prefix' => 'documents'), function()
+    {
+        Route::any('/',                     array('as' => 'portal.docs.index',          'uses' => 'T4KControllers\Documents\DocumentsController@index'));
+        Route::any('ajouter',               array('as' => 'portal.docs.create',         'uses' => 'T4KControllers\Documents\DocumentsController@create'));
+        Route::any('ajouter/save',          array('as' => 'portal.docs.store',          'uses' => 'T4KControllers\Documents\DocumentsController@store'));
+        Route::any('modifier/{id}',         array('as' => 'portal.docs.edit',           'uses' => 'T4KControllers\Documents\DocumentsController@edit'));
+        Route::any('modifier/save/{id}',    array('as' => 'portal.docs.update',         'uses' => 'T4KControllers\Documents\DocumentsController@update'));
+        Route::any('supprimer/{id}',        array('as' => 'portal.docs.destroy',        'uses' => 'T4KControllers\Documents\DocumentsController@destroy'));
+    });
+    
+    /**
      * Module Horaire
      * @namespace T4KControllers\Horaire
      */

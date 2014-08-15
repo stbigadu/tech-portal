@@ -1,0 +1,294 @@
+<?php
+
+namespace T4KControllers\Documents;
+
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\View;
+
+/**
+ * T4KControllers\Documents\DocumentsController class
+ * @author      minhnhatbui
+ * @copyright   2014 Équipe Team 3990: Tech for Kids (Collège Regina Assumpta, Montréal, QC)
+ * @abstract    View Controller for the Documents functionality.
+ */
+
+class DocumentsController extends \BaseController { 
+    
+    /**
+     * Constructor.
+     */
+    public function __construct() {
+        $this->beforeFilter('csrf', array('on' => 'post'));
+        $this->beforeFilter('auth');
+        setlocale(LC_ALL, 'fr_CA.UTF-8');
+    }
+    
+    /**
+     * Display all documents.
+     * @return View Response
+     */
+	public function index()
+	{
+	    // Get current directory
+	    $current_dir = (empty(Input::get('path'))) ? '' : Input::get('path').'/';
+	    
+	    // Instantiate new Filesystem object
+	    $fs = new \Illuminate\Filesystem\Filesystem;
+	    
+	    // Get all directories for the current path
+	    $base_dir = public_path().'/files/documents/';
+	    $path = $base_dir.$current_dir;
+	    $dirs = $fs->directories($path);
+	    
+	    // Get all files for the current path
+	    $files = $fs->files($path);
+	    
+	    // Get parent folder path
+	    $parent_array = explode('/', substr($current_dir, 0, -1));
+	    array_pop($parent_array);
+	    $parent_dir = '';
+	    foreach ($parent_array as $value)
+	    {
+	        $parent_dir .= $value.'/';
+	    }
+	    
+	    // Array of data to send to view
+	    $data = array(
+                'fs'            => $fs,
+                'dirs'          => $dirs,
+                'files'         => $files,
+                'path'          => $path,
+	            'base_dir'      => $base_dir,
+                'current_dir'   => $current_dir,
+	            'parent_dir'    => substr($parent_dir, 0, -1),
+                'currentRoute'  => Route::currentRouteName(),
+                'activeScreen'  => 'DocumentsIndex'
+	    );
+	    
+	    // Render view
+	    $this->layout->content = View::make('documents.index', $data);
+	}
+	
+	/**
+	 * View a news item.
+	 * @param int $id
+	 */
+	public function view($id)
+	{
+	    // Retrieve all news
+	    $articles = \T4KModels\Nouvelle::
+    	      orderBy('datetime', 'desc')
+    	    ->paginate($this->ItemsPerPage);
+	    
+	    // Retrieve the news item with its id
+	    $article = \T4KModels\Nouvelle::find($id);
+	     
+	    // Array of data to send to view
+	    $data = array(
+                'article'       => $article,
+                'articles'      => $articles,
+                'ItemsCount'    => \T4KModels\Nouvelle::count(),
+                'currentRoute'  => Route::currentRouteName(),
+                'activeScreen'  => 'DocumentsIndex'
+	    );
+	     
+	    // Render view
+	    $this->layout->content = View::make('nouvelles.index', $data);
+	}
+	
+	/**
+	 * Create a news item.
+	 * @return View Response
+	 */
+	public function create()
+	{
+	    // Array of data to send to view
+	    $data = array(
+                'currentRoute'  => Route::currentRouteName(),
+                'activeScreen'  => 'DocumentsIndex'
+	    );
+	     
+	    // Render view
+	    $this->layout->content = View::make('nouvelles.form', $data);
+	}
+	
+	/**
+	 * Post the new news item in DB.
+	 * @return Response
+	 */
+	public function store()
+	{
+	    // Validation rules
+	    $validator = Validator::make(Input::all(), \T4KModels\Nouvelle::$rules, \T4KModels\Nouvelle::$messages);
+	    
+	    // Upload files
+	    $files = Input::file('file');
+	    array_pop($files);
+	    
+	    // Validator check
+	    if ($validator->fails())
+	    {
+	        // Throw error and redirect to previous screen
+	        return Redirect::route('portal.nouvelles.create')->withErrors($validator)->withInput();
+	    }
+	    else
+	    {
+	        // Create new object from model and save it
+	        $article = new \T4KModels\Nouvelle;
+	        $article->user_id      = Auth::user()->id;
+	        $article->datetime     = date('Y-m-d H:i:s');
+	        $article->title        = Input::get('title');
+	        $article->content      = Input::get('content');
+	        $article->save();
+	        
+	        // Upload files
+	        if (!empty($files))
+	        {
+    	        foreach ($files as $file)
+    	        {
+    	            // Save to DB
+    	            $fileDB = new \T4KModels\File;
+    	            $fileDB->nouvelle_id     = $article->id;
+    	            $fileDB->user_id         = Auth::user()->id;
+    	            $fileDB->path            = '/files/nouvelles/'.$article->id.'/'.$file->getClientOriginalName();
+    	            $fileDB->name            = $file->getClientOriginalName();
+    	            $fileDB->save();
+    	            
+    	            // Move file to permanent location
+    	            if (!empty($file)) $file->move(public_path().'/files/nouvelles/'.$article->id.'/', $file->getClientOriginalName());
+    	        }
+	        }
+	
+	        // Redirect to view screen with success message
+	        Session::flash('store', true);
+	        return Redirect::route('portal.nouvelles.view', $article->id);
+	    }
+	}
+	
+	/**
+	 * Modify an existing news item.
+	 * @param int $id
+	 * @return View Response
+	 */
+	public function edit($id)
+	{
+	    // Retrieve the news item with its id
+	    $article = \T4KModels\Nouvelle::find($id);
+	     
+	    // Array of data to send to view
+	    $data = array(
+                'article'       => $article,
+	            'currentRoute'  => Route::currentRouteName(),
+                'activeScreen'  => 'DocumentsIndex'
+	    );
+	     
+	    // Render view
+	    $this->layout->content = View::make('nouvelles.form', $data);
+	}
+	
+	/**
+	 * Post the updated news item to the DB.
+	 * @param int $id
+	 * @return Response
+	 */
+	public function update($id)
+	{
+	    // Validation rules
+	    $validator = Validator::make(Input::all(), \T4KModels\Nouvelle::$rules, \T4KModels\Nouvelle::$messages);
+	
+	    // Upload files
+	    $files = Input::file('file');
+	    array_pop($files);
+	    
+	    // Validator check
+	    if ($validator->fails())
+	    {
+	        // Throw error and redirect to previous screen
+	        return Redirect::route('portal.nouvelles.edit', $id)->withErrors($validator)->withInput();
+	    }
+	    else
+	    {
+	        // Retrieve object from model and update it
+	        $article = \T4KModels\Nouvelle::find($id);
+	        $article->title        = Input::get('title');
+	        $article->content      = Input::get('content');
+	        $article->save();
+	        
+	        // Upload files
+	        if (!empty($files))
+	        {
+    	        foreach ($files as $file)
+    	        {    	             
+    	            // Save to DB
+    	            $fileDB = new \T4KModels\File;
+    	            $fileDB->nouvelle_id     = $article->id;
+    	            $fileDB->user_id         = Auth::user()->id;
+    	            $fileDB->path            = '/files/nouvelles/'.$article->id.'/'.$file->getClientOriginalName();
+    	            $fileDB->name            = $file->getClientOriginalName();
+    	            $fileDB->save();
+    	            
+    	            // Move file to permanent location
+    	            if (!empty($file)) $file->move(public_path().'/files/nouvelles/'.$article->id.'/', $file->getClientOriginalName());
+    	        }
+	        }
+	        
+	        // Remove files
+	        $remove_files = Input::get('remove_file');
+	        if ($remove_files != NULL)
+	        {
+    	        foreach ($remove_files as $remove_file)
+    	        {
+    	            $fileDB = \T4KModels\File::find($remove_file);
+    	            $fileDB->delete();
+    	        }
+	        }
+	
+	        // Redirect to view screen with success message
+	        Session::flash('update', true);
+	        return Redirect::route('portal.nouvelles.view', $article->id);
+	    }
+	}
+	
+	/**
+	 * Soft destroy a news item.
+	 * @param int $id
+	 * @return Response
+	 */
+	public function destroy($id)
+	{
+	    // Retrieve object
+	    $article = \T4KModels\Nouvelle::where('id', $id)->first();
+	    Session::flash('object_name', $article->title_FR);
+	    
+	    // Delete object
+	    $article->delete();
+	
+	    // Redirect to view screen with success message
+	    Session::flash('destroy', true);
+	    return Redirect::route('portal.nouvelles.index');
+	}
+	
+	/**
+	 * Catch-all method for handling missing methods.
+	 * @return Redirect Response
+	 */
+	public function missingMethod($parameters = array())
+	{
+	    // Array of data to send to view
+	    $data = array(
+                'currentRoute'  => Route::currentRouteName(),
+                'activeScreen'  => 'DocumentsIndex'
+	    );
+	    
+	    // Redirect to Dashboard
+	    return Redirect::route('portal.nouvelles.index', $data);
+	}
+
+}
