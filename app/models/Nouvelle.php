@@ -41,11 +41,20 @@ class Nouvelle extends \Eloquent
     
     /**
      * Relationship to User model.
-     * @return Eloquent Scope
+     * @return Eloquent Relationship
      */
     public function user()
     {
         return $this->belongsTo('\T4KModels\User')->withTrashed();
+    }
+    
+    /**
+     * Relationship to File model.
+     * @return Eloquent Relationship
+     */
+    public function files()
+    {
+        return $this->hasMany('\T4KModels\File');
     }
     
 }

@@ -3,11 +3,14 @@
 namespace T4KControllers\Nouvelles;
 
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\View;
 
 /**
  * T4KControllers\Nouvelles\NouvellesController class
@@ -42,12 +45,12 @@ class NouvellesController extends \BaseController {
 	    $data = array(
                 'articles'      => $articles,
                 'ItemsCount'    => \T4KModels\Nouvelle::count(),
-                'currentRoute'  => \Route::currentRouteName(),
+                'currentRoute'  => Route::currentRouteName(),
                 'activeScreen'  => 'NouvellesIndex'
 	    );
 	    
 	    // Render view
-	    $this->layout->content = \View::make('nouvelles.index', $data);
+	    $this->layout->content = View::make('nouvelles.index', $data);
 	}
 	
 	/**
@@ -69,12 +72,12 @@ class NouvellesController extends \BaseController {
                 'article'       => $article,
                 'articles'      => $articles,
                 'ItemsCount'    => \T4KModels\Nouvelle::count(),
-                'currentRoute'  => \Route::currentRouteName(),
+                'currentRoute'  => Route::currentRouteName(),
                 'activeScreen'  => 'NouvellesIndex'
 	    );
 	     
 	    // Render view
-	    $this->layout->content = \View::make('nouvelles.index', $data);
+	    $this->layout->content = View::make('nouvelles.index', $data);
 	}
 	
 	/**
@@ -85,12 +88,12 @@ class NouvellesController extends \BaseController {
 	{
 	    // Array of data to send to view
 	    $data = array(
-                'currentRoute'  => \Route::currentRouteName(),
+                'currentRoute'  => Route::currentRouteName(),
                 'activeScreen'  => 'NouvellesIndex'
 	    );
 	     
 	    // Render view
-	    $this->layout->content = \View::make('nouvelles.form', $data);
+	    $this->layout->content = View::make('nouvelles.form', $data);
 	}
 	
 	/**
@@ -101,7 +104,11 @@ class NouvellesController extends \BaseController {
 	{
 	    // Validation rules
 	    $validator = Validator::make(Input::all(), \T4KModels\Nouvelle::$rules, \T4KModels\Nouvelle::$messages);
-	
+	    
+	    // Upload files
+	    $files = Input::file('file');
+	    array_pop($files);
+	    
 	    // Validator check
 	    if ($validator->fails())
 	    {
@@ -117,6 +124,24 @@ class NouvellesController extends \BaseController {
 	        $article->title        = Input::get('title');
 	        $article->content      = Input::get('content');
 	        $article->save();
+	        
+	        // Upload files
+	        if (!empty($files))
+	        {
+    	        foreach ($files as $file)
+    	        {
+    	            // Save to DB
+    	            $fileDB = new \T4KModels\File;
+    	            $fileDB->nouvelle_id     = $article->id;
+    	            $fileDB->user_id         = Auth::user()->id;
+    	            $fileDB->path            = '/files/nouvelles/'.$article->id.'/'.$file->getClientOriginalName();
+    	            $fileDB->name            = $file->getClientOriginalName();
+    	            $fileDB->save();
+    	            
+    	            // Move file to permanent location
+    	            if (!empty($file)) $file->move(public_path().'/files/nouvelles/'.$article->id.'/', $file->getClientOriginalName());
+    	        }
+	        }
 	
 	        // Redirect to view screen with success message
 	        Session::flash('store', true);
@@ -137,12 +162,12 @@ class NouvellesController extends \BaseController {
 	    // Array of data to send to view
 	    $data = array(
                 'article'       => $article,
-	            'currentRoute'  => \Route::currentRouteName(),
+	            'currentRoute'  => Route::currentRouteName(),
                 'activeScreen'  => 'NouvellesIndex'
 	    );
 	     
 	    // Render view
-	    $this->layout->content = \View::make('nouvelles.form', $data);
+	    $this->layout->content = View::make('nouvelles.form', $data);
 	}
 	
 	/**
@@ -155,6 +180,10 @@ class NouvellesController extends \BaseController {
 	    // Validation rules
 	    $validator = Validator::make(Input::all(), \T4KModels\Nouvelle::$rules, \T4KModels\Nouvelle::$messages);
 	
+	    // Upload files
+	    $files = Input::file('file');
+	    array_pop($files);
+	    
 	    // Validator check
 	    if ($validator->fails())
 	    {
@@ -168,6 +197,35 @@ class NouvellesController extends \BaseController {
 	        $article->title        = Input::get('title');
 	        $article->content      = Input::get('content');
 	        $article->save();
+	        
+	        // Upload files
+	        if (!empty($files))
+	        {
+    	        foreach ($files as $file)
+    	        {    	             
+    	            // Save to DB
+    	            $fileDB = new \T4KModels\File;
+    	            $fileDB->nouvelle_id     = $article->id;
+    	            $fileDB->user_id         = Auth::user()->id;
+    	            $fileDB->path            = '/files/nouvelles/'.$article->id.'/'.$file->getClientOriginalName();
+    	            $fileDB->name            = $file->getClientOriginalName();
+    	            $fileDB->save();
+    	            
+    	            // Move file to permanent location
+    	            if (!empty($file)) $file->move(public_path().'/files/nouvelles/'.$article->id.'/', $file->getClientOriginalName());
+    	        }
+	        }
+	        
+	        // Remove files
+	        $remove_files = Input::get('remove_file');
+	        if ($remove_files != NULL)
+	        {
+    	        foreach ($remove_files as $remove_file)
+    	        {
+    	            $fileDB = \T4KModels\File::find($remove_file);
+    	            $fileDB->delete();
+    	        }
+	        }
 	
 	        // Redirect to view screen with success message
 	        Session::flash('update', true);
@@ -202,7 +260,7 @@ class NouvellesController extends \BaseController {
 	{
 	    // Array of data to send to view
 	    $data = array(
-                'currentRoute'  => \Route::currentRouteName(),
+                'currentRoute'  => Route::currentRouteName(),
                 'activeScreen'  => 'NouvellesIndex'
 	    );
 	    

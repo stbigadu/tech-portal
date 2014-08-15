@@ -56,7 +56,7 @@
                     </div>
                 <?php endif; ?>
             
-                <?php echo ($currentRoute == 'portal.nouvelles.create') ? Form::open(array('route' => 'portal.nouvelles.store', 'files' => true)) : Form::model($article, array('route' => array('portal.nouvelles.update', $article->id))); ?>
+                <?php echo ($currentRoute == 'portal.nouvelles.create') ? Form::open(array('route' => 'portal.nouvelles.store', 'files' => true)) : Form::model($article, array('route' => array('portal.nouvelles.update', $article->id), 'files' => true)); ?>
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="btn-toolbar" role="toolbar">
@@ -104,6 +104,23 @@
                                             <dl>
                                                 <dd><?php echo Form::text('title', null, array('class' => 'form-control input-lg', 'placeholder' => 'Titre de la nouvelle...', 'id' => 'title', 'style' => 'font-size: 24px; font-weight: 500')); ?></dd>
                                                 <dd><?php echo Form::textarea('content', null, array('class' => 'form-control', 'placeholder' => 'Texte de la nouvelle...', 'id' => 'content', 'rows' => 15)); ?></dd>
+                                                
+                                                <dt><label>Pièce(s) jointe(s)</label></dt>
+                                                <dd>
+                                                    <div class="small text-muted" style="margin-top: 10px">Cochez pour supprimer une pièce-jointe.</div>
+                                                    <?php if (isset($article) && $article->files != NULL) : ?>
+                                                        <?php foreach ($article->files as $file) : ?>
+                                                            <?php echo Form::checkbox('remove_file[]', $file->id, null, array('id' => 'remove_file[]')); ?>
+                                                            <a href="<?php echo url($file->path); ?>" target="_blank"><i class="fa fa-cloud-download fa-fw"></i> <?php echo $file->name ?></a> 
+                                                            <span class="text-muted">(<?php echo number_format(round($file->size / 1024), 0, ',', ' '); ?> Ko)</span>
+                                                            <br />
+                                                        <?php endforeach; ?>
+                                                    <?php endif; ?>
+                                                    <div class="small text-muted" style="margin-top: 10px">Sélectionnez un fichier PDF pour l'ajouter à cette nouvelle:</div>
+                                                    <div id="file-container">
+                                                        <?php echo Form::file('file[]', array('class' => 'form-control', 'style' => 'margin-bottom: 5px')); ?>
+                                                    </div>
+                                                </dd>
                                             </dl>
                                         </div>
                                     </div>
@@ -113,41 +130,6 @@
  
                     </div>
                 <?php echo Form::close(); ?>
-                
-                <script type="text/javascript">
-                $('.toggle-tooltip').tooltip({container: 'body'});
-                </script>
-                
-                <script type="text/javascript">
-                
-                // Datetime Picker
-                var datetimepickerParam = {
-                        language: 'fr',
-                        autoclose: true,
-                        format: 'yyyy-mm-dd hh:ii:ss',
-                        todayBtn: 'linked',
-                        todayHighlight: true,
-                        minuteStep: 15,
-                };
-                
-                $('#datetime').datetimepicker(datetimepickerParam);
-                
-                </script>
-    
-                <script type="text/javascript">
-                
-                // WYSIHTML5 Textarea Editor
-                var wysihtml5Param = {
-                        locale: 'fr-FR',
-                        html: true,
-                        color: true,
-                        size: 'sm',
-                        fa: true
-                };
-                
-                $('#content').wysihtml5(wysihtml5Param);
-                
-                </script>
             
             <?php else : ?>
             <div class="row">
@@ -170,6 +152,50 @@
     
         @section('scripts_eof')
             @parent
+            
+            <script type="text/javascript">
+            $('input[type=file]').change(fileHandler);
+
+            function fileHandler() {
+                var form = $(this).closest('#file-container');
+                $('<?php echo Form::file('file[]', array('class' => 'form-control', 'style' => 'margin-bottom: 5px')); ?>').change(fileHandler).appendTo(form);
+            }
+            </script>
+            
+            <script type="text/javascript">
+            $('.toggle-tooltip').tooltip({container: 'body'});
+            </script>
+            
+            <script type="text/javascript">
+            
+            // Datetime Picker
+            var datetimepickerParam = {
+                    language: 'fr',
+                    autoclose: true,
+                    format: 'yyyy-mm-dd hh:ii:ss',
+                    todayBtn: 'linked',
+                    todayHighlight: true,
+                    minuteStep: 15,
+            };
+            
+            $('#datetime').datetimepicker(datetimepickerParam);
+            
+            </script>
+
+            <script type="text/javascript">
+            
+            // WYSIHTML5 Textarea Editor
+            var wysihtml5Param = {
+                    locale: 'fr-FR',
+                    html: true,
+                    color: true,
+                    size: 'sm',
+                    fa: true
+            };
+            
+            $('#content').wysihtml5(wysihtml5Param);
+            
+            </script>
         @stop
         
     @stop

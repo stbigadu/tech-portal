@@ -143,18 +143,43 @@
                             </div>
                         </div>
                     <?php endif; ?>
-                
-                    <small>
-                    <p class="text-muted">
-                        <?php echo ($article->datetime == NULL) ? 'Aucune date.' : 'Le '.mb_strtolower(strftime('%A %e %B %Y', strtotime($article->datetime))); ?><br />
-                        Par <?php echo $article->user->full_name; ?> (<i class="fa fa-envelope-o fa-fw"></i> <?php echo HTML::mailto($article->user->email); ?>)
-                    </p>
-                    </small>
                     
-                    <div class="page-header" style="margin-top: 0; padding-top: 0">
-                        <h1 style="margin-top: 0; padding-top: 0"><?php echo $article->title; ?></h1>
+                    <div class="panel panel-default">
+                        <div class="panel-heading text-muted small">
+                            <dl class="dl-horizontal">
+                                
+                                <dt>Date</dt>
+                                <dd><i class="fa fa-clock-o fa-fw"></i> <?php echo ($article->datetime == NULL) ? 'Aucune date.' : 'Le '.mb_strtolower(strftime('%A %e %B %Y', strtotime($article->datetime))); ?></dd>
+                                
+                                <dt>Créé par</dt>
+                                <dd><i class="fa fa-user fa-fw"></i> <?php echo $article->user->full_name; ?> (<i class="fa fa-envelope-o fa-fw"></i> <?php echo HTML::mailto($article->user->email); ?>)</dd>
+                                
+                            </dl>
+                        </div>
+                        <div class="panel-body">
+                            <h1 style="margin-top: 0; padding-top: 0"><?php echo $article->title; ?></h1>
+                            <hr />
+                            <?php echo $article->content; ?>
+                        </div>
+                        <?php if (count($article->files) > 0) : ?>
+                        <ul class="list-group">
+                            <li class="list-group-item">
+                                Pièce(s) jointe(s) :
+                                <ul>
+                                    <?php foreach ($article->files as $file) : ?>
+                                        <li>
+                                            <a href="<?php echo url($file->path); ?>" target="_blank"><i class="fa fa-cloud-download fa-fw"></i> <?php echo $file->name ?></a> 
+                                            <span class="text-muted">(<?php echo number_format(round($file->size / 1024), 0, ',', ' '); ?> Ko)</span>
+                                        </li>
+                                    <?php endforeach; ?>
+                                </ul>
+                            </li>
+                        </ul>
+                        <?php endif; ?>
                     </div>
-                    <?php echo $article->content; ?>
+                    
+                    <pre><?php print_r(Session::get('files')); ?></pre>
+                
                 </div>
                 <?php endif; ?>
             </div>
