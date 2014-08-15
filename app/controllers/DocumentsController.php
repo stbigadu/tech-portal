@@ -21,6 +21,8 @@ use Illuminate\Support\Facades\View;
 
 class DocumentsController extends \BaseController { 
     
+    protected $base_dir = '/files/documents';
+    
     /**
      * Constructor.
      */
@@ -28,6 +30,7 @@ class DocumentsController extends \BaseController {
         $this->beforeFilter('csrf', array('on' => 'post'));
         $this->beforeFilter('auth');
         setlocale(LC_ALL, 'fr_CA.UTF-8');
+        $this->base_dir = public_path().$this->base_dir;
     }
     
     /**
@@ -37,14 +40,13 @@ class DocumentsController extends \BaseController {
 	public function index()
 	{
 	    // Get current directory
-	    $current_dir = (empty(Input::get('path'))) ? '' : Input::get('path').'/';
+	    $current_dir = (Input::get('path') == NULL || Input::get('path') == '0') ? '' : Input::get('path').'/';
 	    
 	    // Instantiate new Filesystem object
 	    $fs = new \Illuminate\Filesystem\Filesystem;
 	    
 	    // Get all directories for the current path
-	    $base_dir = public_path().'/files/documents/';
-	    $path = $base_dir.$current_dir;
+	    $path = $this->base_dir.$current_dir;
 	    $dirs = $fs->directories($path);
 	    
 	    // Get all files for the current path
@@ -65,9 +67,9 @@ class DocumentsController extends \BaseController {
                 'dirs'          => $dirs,
                 'files'         => $files,
                 'path'          => $path,
-	            'base_dir'      => $base_dir,
+	            'base_dir'      => $this->base_dir,
                 'current_dir'   => $current_dir,
-	            'parent_dir'    => substr($parent_dir, 0, -1),
+	            'parent_dir'    => (substr($parent_dir, 0, -1) == '0') ? '' : substr($parent_dir, 0, -1),
                 'currentRoute'  => Route::currentRouteName(),
                 'activeScreen'  => 'DocumentsIndex'
 	    );
@@ -77,202 +79,150 @@ class DocumentsController extends \BaseController {
 	}
 	
 	/**
-	 * View a news item.
-	 * @param int $id
-	 */
-	public function view($id)
-	{
-	    // Retrieve all news
-	    $articles = \T4KModels\Nouvelle::
-    	      orderBy('datetime', 'desc')
-    	    ->paginate($this->ItemsPerPage);
-	    
-	    // Retrieve the news item with its id
-	    $article = \T4KModels\Nouvelle::find($id);
-	     
-	    // Array of data to send to view
-	    $data = array(
-                'article'       => $article,
-                'articles'      => $articles,
-                'ItemsCount'    => \T4KModels\Nouvelle::count(),
-                'currentRoute'  => Route::currentRouteName(),
-                'activeScreen'  => 'DocumentsIndex'
-	    );
-	     
-	    // Render view
-	    $this->layout->content = View::make('nouvelles.index', $data);
-	}
-	
-	/**
-	 * Create a news item.
-	 * @return View Response
-	 */
-	public function create()
-	{
-	    // Array of data to send to view
-	    $data = array(
-                'currentRoute'  => Route::currentRouteName(),
-                'activeScreen'  => 'DocumentsIndex'
-	    );
-	     
-	    // Render view
-	    $this->layout->content = View::make('nouvelles.form', $data);
-	}
-	
-	/**
-	 * Post the new news item in DB.
+	 * Create directory
 	 * @return Response
 	 */
-	public function store()
+	public function createDir()
 	{
-	    // Validation rules
-	    $validator = Validator::make(Input::all(), \T4KModels\Nouvelle::$rules, \T4KModels\Nouvelle::$messages);
+	    // Get current directory
+	    $current_dir = (Input::get('path') == NULL || Input::get('path') == '0') ? '' : Input::get('path').'/';
+	    
+	    // Instantiate new Filesystem object
+	    $fs = new \Illuminate\Filesystem\Filesystem;
+	    
+	    // Create new directory
+	    $new_dir = $this->base_dir.$current_dir.Input::get('create_dir');
+	    $fs->makeDirectory($new_dir);
+	    
+	    // Redirect
+	    Session::flash('action', 'create_dir');
+	    Session::flash('create_dir', Input::get('create_dir'));
+	    return Redirect::route('portal.docs.index', array('path' => substr(substr($this->base_dir.$current_dir, 0, -1), strlen($this->base_dir))));
+	}
+	
+	/**
+	 * Rename directory
+	 * @return Response
+	 */
+	public function renameDir()
+	{
+	    // Get current directory
+	    $current_dir = (Input::get('path') == NULL || Input::get('path') == '0') ? '' : Input::get('path').'/';
+	     
+	    // Instantiate new Filesystem object
+	    $fs = new \Illuminate\Filesystem\Filesystem;
+	     
+	    // Create new directory
+	    $old_dir = Input::get('old_dir');
+	    $new_dir = $this->base_dir.$current_dir.Input::get('create_dir');
+	    $fs->copyDirectory($old_dir, $new_dir);
+	    $fs->deleteDirectory($old_dir);
+	     
+	    // Redirect
+	    Session::flash('action', 'rename_dir');
+	    Session::flash('old_dir', substr($old_dir, strlen($this->base_dir.$current_dir)));
+	    Session::flash('create_dir', Input::get('create_dir'));
+	    return Redirect::route('portal.docs.index', array('path' => substr(substr($this->base_dir.$current_dir, 0, -1), strlen($this->base_dir))));
+	}
+	
+	/**
+	 * Delete directory
+	 * @return Response
+	 */
+	public function deleteDir()
+	{
+	    // Get current directory
+	    $current_dir = (Input::get('path') == NULL || Input::get('path') == '0') ? '' : Input::get('path').'/';
+	
+	    // Instantiate new Filesystem object
+	    $fs = new \Illuminate\Filesystem\Filesystem;
+	
+	    // Create new directory
+	    $delete_dir = Input::get('delete_dir');
+	    $fs->deleteDirectory($delete_dir);
+	
+	    // Redirect
+	    Session::flash('action', 'delete_dir');
+	    Session::flash('delete_dir', substr($delete_dir, strlen($this->base_dir.$current_dir)));
+	    return Redirect::route('portal.docs.index', array('path' => substr(substr($this->base_dir.$current_dir, 0, -1), strlen($this->base_dir))));
+	}
+	
+	/**
+	 * Add files.
+	 * @return Response
+	 */
+	public function addFiles()
+	{
+	    // Get current directory
+	    $current_dir = (Input::get('path') == NULL || Input::get('path') == '0') ? '' : Input::get('path').'/';
+	    
+	    // Instantiate new Filesystem object
+	    $fs = new \Illuminate\Filesystem\Filesystem;
 	    
 	    // Upload files
 	    $files = Input::file('file');
 	    array_pop($files);
-	    
-	    // Validator check
-	    if ($validator->fails())
-	    {
-	        // Throw error and redirect to previous screen
-	        return Redirect::route('portal.nouvelles.create')->withErrors($validator)->withInput();
-	    }
-	    else
-	    {
-	        // Create new object from model and save it
-	        $article = new \T4KModels\Nouvelle;
-	        $article->user_id      = Auth::user()->id;
-	        $article->datetime     = date('Y-m-d H:i:s');
-	        $article->title        = Input::get('title');
-	        $article->content      = Input::get('content');
-	        $article->save();
-	        
-	        // Upload files
-	        if (!empty($files))
-	        {
-    	        foreach ($files as $file)
-    	        {
-    	            // Save to DB
-    	            $fileDB = new \T4KModels\File;
-    	            $fileDB->nouvelle_id     = $article->id;
-    	            $fileDB->user_id         = Auth::user()->id;
-    	            $fileDB->path            = '/files/nouvelles/'.$article->id.'/'.$file->getClientOriginalName();
-    	            $fileDB->name            = $file->getClientOriginalName();
-    	            $fileDB->save();
-    	            
-    	            // Move file to permanent location
-    	            if (!empty($file)) $file->move(public_path().'/files/nouvelles/'.$article->id.'/', $file->getClientOriginalName());
-    	        }
-	        }
+	     
+        // Upload files
+        if (!empty($files))
+        {
+            foreach ($files as $file)
+            {
+                // Move file to permanent location
+                if (!empty($file)) $file->move($this->base_dir.$current_dir, $file->getClientOriginalName());
+                Session::flash('action', 'add_files');
+                Session::flash('count', count($files));
+            }
+        }
 	
-	        // Redirect to view screen with success message
-	        Session::flash('store', true);
-	        return Redirect::route('portal.nouvelles.view', $article->id);
-	    }
+        // Redirect 
+        return Redirect::route('portal.docs.index', array('path' => substr(substr($this->base_dir.$current_dir, 0, -1), strlen($this->base_dir))));
 	}
 	
 	/**
-	 * Modify an existing news item.
-	 * @param int $id
-	 * @return View Response
-	 */
-	public function edit($id)
-	{
-	    // Retrieve the news item with its id
-	    $article = \T4KModels\Nouvelle::find($id);
-	     
-	    // Array of data to send to view
-	    $data = array(
-                'article'       => $article,
-	            'currentRoute'  => Route::currentRouteName(),
-                'activeScreen'  => 'DocumentsIndex'
-	    );
-	     
-	    // Render view
-	    $this->layout->content = View::make('nouvelles.form', $data);
-	}
-	
-	/**
-	 * Post the updated news item to the DB.
-	 * @param int $id
+	 * Rename file.
 	 * @return Response
 	 */
-	public function update($id)
+	public function renameFile()
 	{
-	    // Validation rules
-	    $validator = Validator::make(Input::all(), \T4KModels\Nouvelle::$rules, \T4KModels\Nouvelle::$messages);
-	
-	    // Upload files
-	    $files = Input::file('file');
-	    array_pop($files);
+	    // Get current directory
+	    $current_dir = (Input::get('path') == NULL || Input::get('path') == '0') ? '' : Input::get('path').'/';
 	    
-	    // Validator check
-	    if ($validator->fails())
-	    {
-	        // Throw error and redirect to previous screen
-	        return Redirect::route('portal.nouvelles.edit', $id)->withErrors($validator)->withInput();
-	    }
-	    else
-	    {
-	        // Retrieve object from model and update it
-	        $article = \T4KModels\Nouvelle::find($id);
-	        $article->title        = Input::get('title');
-	        $article->content      = Input::get('content');
-	        $article->save();
-	        
-	        // Upload files
-	        if (!empty($files))
-	        {
-    	        foreach ($files as $file)
-    	        {    	             
-    	            // Save to DB
-    	            $fileDB = new \T4KModels\File;
-    	            $fileDB->nouvelle_id     = $article->id;
-    	            $fileDB->user_id         = Auth::user()->id;
-    	            $fileDB->path            = '/files/nouvelles/'.$article->id.'/'.$file->getClientOriginalName();
-    	            $fileDB->name            = $file->getClientOriginalName();
-    	            $fileDB->save();
-    	            
-    	            // Move file to permanent location
-    	            if (!empty($file)) $file->move(public_path().'/files/nouvelles/'.$article->id.'/', $file->getClientOriginalName());
-    	        }
-	        }
-	        
-	        // Remove files
-	        $remove_files = Input::get('remove_file');
-	        if ($remove_files != NULL)
-	        {
-    	        foreach ($remove_files as $remove_file)
-    	        {
-    	            $fileDB = \T4KModels\File::find($remove_file);
-    	            $fileDB->delete();
-    	        }
-	        }
-	
-	        // Redirect to view screen with success message
-	        Session::flash('update', true);
-	        return Redirect::route('portal.nouvelles.view', $article->id);
-	    }
+	    // Instantiate new Filesystem object
+	    $fs = new \Illuminate\Filesystem\Filesystem;
+	    
+	    // Rename file
+	    $old_file = Input::get('old_file');
+	    $new_file = $this->base_dir.$current_dir.'/'.Input::get('new_file');
+	    $fs->move($old_file, $new_file);
+	    
+	    // Redirect
+	    Session::flash('action', 'rename_file');
+	    Session::flash('old_file', substr($old_file, strlen($this->base_dir.$current_dir)));
+	    Session::flash('new_file', Input::get('new_file'));
+	    return Redirect::route('portal.docs.index', array('path' => substr(substr($this->base_dir.$current_dir, 0, -1), strlen($this->base_dir))));
 	}
 	
 	/**
-	 * Soft destroy a news item.
-	 * @param int $id
+	 * Delete file.
 	 * @return Response
 	 */
-	public function destroy($id)
+	public function deleteFile()
 	{
-	    // Retrieve object
-	    $article = \T4KModels\Nouvelle::where('id', $id)->first();
-	    Session::flash('object_name', $article->title_FR);
+	    // Get current directory
+	    $current_dir = (Input::get('path') == NULL || Input::get('path') == '0') ? '' : Input::get('path').'/';
+	     
+	    // Instantiate new Filesystem object
+	    $fs = new \Illuminate\Filesystem\Filesystem;
 	    
-	    // Delete object
-	    $article->delete();
-	
-	    // Redirect to view screen with success message
-	    Session::flash('destroy', true);
-	    return Redirect::route('portal.nouvelles.index');
+	    // Delete file
+	    $delete_file = Input::get('delete_file');
+	    $fs->delete($delete_file);
+	    
+	    // Redirect
+	    Session::flash('action', 'delete_file');
+	    Session::flash('delete_file', substr($delete_file, strlen($this->base_dir.$current_dir)+1));
+	    return Redirect::route('portal.docs.index', array('path' => substr(substr($this->base_dir.$current_dir, 0, -1), strlen($this->base_dir))));
 	}
 	
 	/**

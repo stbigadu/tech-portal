@@ -84,11 +84,12 @@ Route::group(array('before' => 'auth'), function()
     Route::group(array('prefix' => 'documents'), function()
     {
         Route::any('/',                     array('as' => 'portal.docs.index',          'uses' => 'T4KControllers\Documents\DocumentsController@index'));
-        Route::any('ajouter',               array('as' => 'portal.docs.create',         'uses' => 'T4KControllers\Documents\DocumentsController@create'));
-        Route::any('ajouter/save',          array('as' => 'portal.docs.store',          'uses' => 'T4KControllers\Documents\DocumentsController@store'));
-        Route::any('modifier/{id}',         array('as' => 'portal.docs.edit',           'uses' => 'T4KControllers\Documents\DocumentsController@edit'));
-        Route::any('modifier/save/{id}',    array('as' => 'portal.docs.update',         'uses' => 'T4KControllers\Documents\DocumentsController@update'));
-        Route::any('supprimer/{id}',        array('as' => 'portal.docs.destroy',        'uses' => 'T4KControllers\Documents\DocumentsController@destroy'));
+        Route::any('ajouter/dossier',       array('as' => 'portal.docs.createdir',      'uses' => 'T4KControllers\Documents\DocumentsController@createDir'));
+        Route::any('renommer/dossier',      array('as' => 'portal.docs.renamedir',      'uses' => 'T4KControllers\Documents\DocumentsController@renameDir'));
+        Route::any('supprimer/dossier',     array('as' => 'portal.docs.deletedir',      'uses' => 'T4KControllers\Documents\DocumentsController@deleteDir'));
+        Route::any('ajouter/fichiers',      array('as' => 'portal.docs.addfiles',       'uses' => 'T4KControllers\Documents\DocumentsController@addFiles'));
+        Route::any('renommer/fichier',      array('as' => 'portal.docs.renamefile',     'uses' => 'T4KControllers\Documents\DocumentsController@renameFile'));
+        Route::any('supprimer/fichier',     array('as' => 'portal.docs.deletefile',     'uses' => 'T4KControllers\Documents\DocumentsController@deleteFile'));
     });
     
     /**
