@@ -21,7 +21,7 @@ use Illuminate\Support\Facades\View;
 
 class DocumentsController extends \BaseController { 
     
-    protected $base_dir = '/files/documents';
+    protected $base_dir = '/files/documents/';
     
     /**
      * Constructor.

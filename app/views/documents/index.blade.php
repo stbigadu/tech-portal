@@ -86,7 +86,7 @@
                                         </div>
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="submit" class="btn btn-warning"><i class="fa fa-plus fa-fw"></i> Ajouter</button>
+                                        <button type="submit" class="btn btn-warning"><i class="fa fa-plus fa-fw"></i> Ajouter les fichiers</button>
                                         <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-times-circle fa-fw"></i> Annuler</button>
                                     </div>
                                 </div>
