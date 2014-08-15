@@ -38,6 +38,7 @@
                     <div class="btn-toolbar" role="toolbar">
                     
                         <?php if (Auth::user()->is_mentor || Auth::user()->is_junior_mentor) : ?>
+                        
                         <div class="btn-group">
                             <a href="#" class="btn btn-default" data-toggle="modal" data-target="#create-dir"><i class="fa fa-folder fa-fw"></i> Ajouter un dossier</a>
                         </div>
@@ -71,7 +72,7 @@
                             <a href="#" class="btn btn-default" data-toggle="modal" data-target="#add-files"><i class="fa fa-file-o fa-fw"></i> Ajouter des fichiers</a>
                         </div>
                         
-                        <?php echo Form::open(array('route' => array('portal.docs.addfiles', 'path' => Input::get('path')), 'files' => true)); ?>
+                        <?php echo Form::open(array('route' => array('portal.docs.addfiles', 'path' => Input::get('path')), 'files' => true, 'id' => 'form-add-files')); ?>
                         <div class="modal fade" id="add-files" tabindex="-1" role="dialog">
                             <div class="modal-dialog">
                                 <div class="modal-content">
@@ -84,9 +85,14 @@
                                         <div id="file-container">
                                             <?php echo Form::file('file[]', array('class' => '', 'style' => 'margin-bottom: 5px')); ?>
                                         </div>
+                                        <div id="uploading" class="hide">
+                                            &nbsp;
+                                            <p>Téléchargement des fichiers en cours...</p>
+                                            <div class="progress"><div class="progress-bar progress-bar-warning progress-bar-striped active" style="width: 100%"></div></div>
+                                        </div>
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="submit" class="btn btn-warning"><i class="fa fa-plus fa-fw"></i> Ajouter les fichiers</button>
+                                        <button type="button" id="submit-add-files" class="btn btn-warning"><i class="fa fa-plus fa-fw"></i> Ajouter les fichiers</button>
                                         <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-times-circle fa-fw"></i> Annuler</button>
                                     </div>
                                 </div>
@@ -179,13 +185,15 @@
                                 <th>Type</th>
                                 <th style="width: 100px">Taille</th>
                                 <th style="width: 200px" class="text-center">Dernière modification</th>
+                                <?php if (Auth::user()->is_mentor || Auth::user()->is_junior_mentor) : ?>
                                 <th style="width: 80px">Actions</th>
+                                <?php endif; ?>
                             </tr>
                         </thead>
                         <tbody>
                             <?php if (!empty($current_dir)) : ?>
                                 <tr>
-                                    <td colspan="6" class="active" style="padding-left: 60px"><a href="<?php echo route('portal.docs.index', array('path' => $parent_dir)); ?>"><i class="fa fa-level-up fa-fw"></i> Retourner au dossier supérieur</a></td>
+                                    <td colspan="<?php echo (Auth::user()->is_mentor || Auth::user()->is_junior_mentor) ? 6 : 5; ?>" class="active" style="padding-left: 60px"><a href="<?php echo route('portal.docs.index', array('path' => $parent_dir)); ?>"><i class="fa fa-level-up fa-fw"></i> Retourner au dossier supérieur</a></td>
                                 </tr>
                             <?php endif; ?>
                             <?php $i = 0; foreach ($dirs as $dir) : ?>
@@ -195,12 +203,15 @@
                                     <td>Dossier</td>
                                     <td class="text-right"></td>
                                     <td></td>
+                                    <?php if (Auth::user()->is_mentor || Auth::user()->is_junior_mentor) : ?>
                                     <td>
                                         <a href="#" class="btn btn-default btn-xs" data-toggle="modal" data-target="#rename-dir-<?php echo $i; ?>"><i class="fa fa-pencil fa-fw"></i></a> 
                                         <a href="#" class="btn btn-default btn-xs" data-toggle="modal" data-target="#delete-dir-<?php echo $i; ?>"><i class="fa fa-trash-o fa-fw"></i></a>
                                     </td>
+                                    <?php endif; ?>
                                 </tr>
                                 
+                                <?php if (Auth::user()->is_mentor || Auth::user()->is_junior_mentor) : ?>
                                 <?php echo Form::open(array('route' => array('portal.docs.renamedir', 'path' => Input::get('path')))); ?>
                                 <?php echo Form::hidden('old_dir', $dir); ?>
                                 <div class="modal fade" id="rename-dir-<?php echo $i; ?>" tabindex="-1" role="dialog">
@@ -270,6 +281,7 @@
                                     </div>
                                 </div>
                                 <?php echo Form::close(); ?>
+                                <?php endif; ?>
                                 
                             <?php $i++; endforeach; ?>
                             <?php $i = 0; foreach ($files as $file) : ?>
@@ -279,12 +291,15 @@
                                     <td><?php echo finfo_file(finfo_open(FILEINFO_MIME_TYPE), $file); ?></td>
                                     <td class="text-right"><?php echo number_format(round($fs->size($file)/pow(1024, 1)), 0, ',', ' '); ?> Ko</td>
                                     <td class="text-center"><?php echo strftime('%Y/%m/%d, à %H:%M:%S', $fs->lastModified($file)); ?></td>
+                                    <?php if (Auth::user()->is_mentor || Auth::user()->is_junior_mentor) : ?>
                                     <td>
                                         <a href="#" class="btn btn-default btn-xs" data-toggle="modal" data-target="#rename-file-<?php echo $i; ?>"><i class="fa fa-pencil fa-fw"></i></a> 
                                         <a href="#" class="btn btn-default btn-xs" data-toggle="modal" data-target="#delete-file-<?php echo $i; ?>"><i class="fa fa-trash-o fa-fw"></i></a>
                                     </td>
+                                    <?php endif; ?>
                                 </tr>
                                 
+                                <?php if (Auth::user()->is_mentor || Auth::user()->is_junior_mentor) : ?>
                                 <?php echo Form::open(array('route' => array('portal.docs.renamefile', 'path' => Input::get('path')))); ?>
                                 <?php echo Form::hidden('old_file', $file); ?>
                                 <div class="modal fade" id="rename-file-<?php echo $i; ?>" tabindex="-1" role="dialog">
@@ -355,6 +370,8 @@
                                     </div>
                                 </div>
                                 <?php echo Form::close(); ?>
+                                <?php endif; ?>
+                                
                             <?php $i++; endforeach; ?>
                         </tbody>
                     </table>
@@ -374,6 +391,15 @@
     
         @section('scripts_eof')
             @parent
+            
+            <script type="text/javascript">
+            $('#submit-add-files').on('click', function() {
+                $('#uploading').removeClass('hide').addClass('show');
+                setTimeout(function() {
+                	document.getElementById('form-add-files').submit();
+                }, 25);
+            });
+            </script>
             
             <script type="text/javascript">
             $('input[type=file]').change(fileHandler);
