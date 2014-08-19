@@ -123,7 +123,7 @@
                                             }
                                         }
                                         ?>
-                                        <div class="clock">
+                                        <div class="clock" style="margin: 10px auto; width: 70%">
                                             <?php echo strftime('%k:%M', strtotime($openingHour)); ?>
                                             <i class="fa fa-caret-right fa-fw"></i>
                                             <?php echo strftime('%k:%M', strtotime($closingHour)); ?>

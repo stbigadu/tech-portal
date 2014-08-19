@@ -48,9 +48,11 @@ class DocumentsController extends \BaseController {
 	    // Get all directories for the current path
 	    $path = $this->base_dir.$current_dir;
 	    $dirs = $fs->directories($path);
+	    sort($dirs, SORT_NATURAL | SORT_FLAG_CASE);
 	    
 	    // Get all files for the current path
 	    $files = $fs->files($path);
+	    sort($files, SORT_NATURAL | SORT_FLAG_CASE);
 	    
 	    // Get parent folder path
 	    $parent_array = explode('/', substr($current_dir, 0, -1));

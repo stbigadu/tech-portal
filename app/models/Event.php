@@ -49,7 +49,7 @@ class Event extends \Eloquent
      */
     public function scopeUpcoming($query)
     {
-        return $query->where('datetime_start', '>', date('Y-m-d H:i:s'))->orderBy('datetime_start', 'desc');
+        return $query->where('datetime_start', '>', date('Y-m-d H:i:s'))->orderBy('datetime_start', 'asc');
     }
     
     /**
