@@ -42,13 +42,13 @@
                 <div class="col-lg-12">
                     <div class="btn-toolbar" role="toolbar">
                     
-                        <?php if (Auth::user()->is_mentor || Auth::user()->is_junior_mentor) : ?>
+                        <?php if (Auth::user()->is_mentor) : ?>
                         <div class="btn-group">
                             <a href="<?php echo route('portal.events.create', array('page' => Input::get('page'))); ?>" class="btn btn-default"><i class="fa fa-plus fa-fw"></i> Ajouter un évènement</a>
                         </div>
                         <?php endif; ?>
                         
-                        <?php if ($event != NULL && Auth::user()->is_mentor || Auth::user()->is_junior_mentor) : ?>
+                        <?php if ($event != NULL && Auth::user()->is_mentor) : ?>
                         <div class="btn-group">
                             <a href="<?php echo route('portal.events.edit', array($event->id, 'page' => Input::get('page'), 'view' => $currentRoute)); ?>" class="btn btn-default"><i class="fa fa-pencil fa-fw"></i> Modifier l'évènement</a>
                         </div>

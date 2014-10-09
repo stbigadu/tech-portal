@@ -36,13 +36,13 @@
                 <div class="col-lg-12">
                     <div class="btn-toolbar" role="toolbar">
                     
-                        <?php if (Auth::user()->is_mentor || Auth::user()->is_junior_mentor) : ?>
+                        <?php if (Auth::user()->is_mentor) : ?>
                         <div class="btn-group">
                             <a href="<?php echo route('portal.nouvelles.create', array('page' => Input::get('page'))); ?>" class="btn btn-default"><i class="fa fa-plus fa-fw"></i> Ajouter une nouvelle</a>
                         </div>
                         <?php endif; ?>
                         
-                        <?php if (isset($article) && Auth::user()->is_mentor || Auth::user()->is_junior_mentor) : ?>
+                        <?php if (isset($article) && Auth::user()->is_mentor) : ?>
                         <div class="btn-group">
                             <a href="<?php echo route('portal.nouvelles.edit', array($article->id, 'page' => Input::get('page'))); ?>" class="btn btn-default"><i class="fa fa-pencil fa-fw"></i> Modifier la nouvelle</a>
                         </div>

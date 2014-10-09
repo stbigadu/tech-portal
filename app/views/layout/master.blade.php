@@ -89,6 +89,15 @@
                             <li><a href="https://my.usfirst.org/frc/tims/site.lasso" target="_blank"><i class="fa fa-globe fa-fw"></i> TIMS</a></li>
                         </ul>
                     </li>
+                    <?php if (Auth::check() && Auth::user()->is_admin) : ?>
+                    <li class="dropdown hidden-xs<?php echo (@$activeScreen == 'AdminIndex') ? ' active' : ''; ?>">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-cog fa-fw"></i> <i class="fa fa-caret-down fa-fw"></i></a>
+                        <ul class="dropdown-menu">
+                            <li class="dropdown-header">Administration</li>
+                            <li><a href="<?php echo route('portal.admin.users.index'); ?>"><i class="fa fa-users fa-fw"></i> Gestion des utilisateurs</a></li>
+                        </ul>
+                    </li>
+                    <?php endif; ?>
                 </ul>
                 
                 <ul class="nav navbar-nav navbar-right visible-xs">

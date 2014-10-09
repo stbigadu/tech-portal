@@ -71,14 +71,14 @@
                         
                         <p><button class="btn btn-t4k" type="submit">Connexion <i class="fa fa-chevron-circle-right fa-fw"></i></button></p>
                         
-                        <p><a href="<?php echo route('portal.users.getremind'); ?>">J'ai oublié mon mot de passe</a></p>
+                        <p><a href="<?php echo route('portal.users.getremind'); ?>">J'ai oublié mon mot de passe, ou bien, c'est ma première utilisation?</a></p>
                         
                     <?php echo Form::close(); ?>
                     
                 </div>
                             
             </div>
-    
+            
         </div>
         @stop
         

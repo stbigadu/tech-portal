@@ -37,7 +37,7 @@
                 <div class="col-lg-4 col-md-4">
                     <?php echo Form::open(array('route' => 'portal.users.postremind', 'class' => 'form_signin')) ?>
                     
-                        <h2 class="form-signin-heading login-heading">Vous avez oublié votre mot de passe?</h2>
+                        <h2 class="form-signin-heading login-heading">Vous avez oublié votre mot de passe, ou bien, c'est votre première utilisation?</h2>
                         
                         <p>Veuillez indiquer votre courriel enregistré à votre compte d'utilisateur sur <strong>Tech Portail</strong>. Un courriel vous sera ensuite envoyé avec les instructions pour réinitialiser votre mot de passe.</p>
                         

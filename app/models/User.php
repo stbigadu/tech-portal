@@ -35,6 +35,27 @@ class User extends \Eloquent implements UserInterface, RemindableInterface
             'between'   => 'Entre 6 et 15 caractères autorisés seulement pour le champ :attribute.',
             'confirmed' => 'Le champ :attribute doit correspondre avec le champ :other.'
     );
+    
+    /**
+     * The set of rules to be validated when creating a new user in the Admin section.
+     * @var array
+     */
+    public static $rulesCreateUser = array(
+            'first_name'                => 'required',
+            'last_name'                 => 'required',
+            'email'                     => 'email|required'
+    );
+    
+    /**
+     * The set of messages thrown after rules validation.
+     * @var array
+     */
+    public static $msgCreateUser = array(
+            'first_name.required'       => 'Le prénom de l\'utilisateur est requis.',
+            'last_name.required'        => 'Le nom de l\'utilisateur est requis.',
+            'email.email'               => 'Le courriel n\'est pas valide.',
+            'email.required'            => 'Le courriel de l\'utilisateur est requis.',
+    );
 
     /**
      * The database table used by the model.

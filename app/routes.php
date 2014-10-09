@@ -116,4 +116,19 @@ Route::group(array('before' => 'auth'), function()
         Route::any('save/infos',            array('as' => 'portal.users.update.info',       'uses' => 'T4KControllers\Users\UsersController@update_info'));
     });
     
+    /**
+     * Module Admin
+     * @namespace T4KControllers\Admin
+     */
+    Route::group(array('prefix' => 'admin/users'), function()
+    {
+        Route::any('/',                     array('as' => 'portal.admin.users.index',       'uses' => 'T4KControllers\Admin\UsersController@index'));
+        Route::any('afficher/{id}',         array('as' => 'portal.admin.users.view',        'uses' => 'T4KControllers\Admin\UsersController@view'));
+        Route::any('ajouter',               array('as' => 'portal.admin.users.create',      'uses' => 'T4KControllers\Admin\UsersController@create'));
+        Route::any('ajouter/save',          array('as' => 'portal.admin.users.store',       'uses' => 'T4KControllers\Admin\UsersController@store'));
+        Route::any('modifier/{id}',         array('as' => 'portal.admin.users.edit',        'uses' => 'T4KControllers\Admin\UsersController@edit'));
+        Route::any('modifier/save/{id}',    array('as' => 'portal.admin.users.update',      'uses' => 'T4KControllers\Admin\UsersController@update'));
+        Route::any('supprimer/{id}',        array('as' => 'portal.admin.users.destroy',     'uses' => 'T4KControllers\Admin\UsersController@destroy'));
+    });
+    
 });
