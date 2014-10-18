@@ -143,7 +143,7 @@ class EventsController extends \BaseController {
 	        // Sending email to each user
 	        foreach ($users as $user)
 	        {
-	            if ($user->is_mentor || $user->is_junior_mentor || $user->is_student)
+	            if ($user->is_mentor || $user->is_junior_mentor || $user->is_student || $user->is_volunteer)
 	            {
     	            // Array of data to send to email
     	            $data = array(

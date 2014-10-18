@@ -110,11 +110,11 @@
                 <div class="col-xs-12">
                 
                     <ol class="breadcrumb">
-                        <li class="active">
-                            <a href="<?php echo route('portal.docs.index'); ?>"><i class="fa fa-file fa-fw"></i> Documents</a> 
-                            <i class="fa fa-angle-right fa-fw"></i> 
-                            <?php echo substr($path, strlen($base_dir)); ?>
-                        </li>
+                        <li class="active"><a href="<?php echo route('portal.docs.index'); ?>"><i class="fa fa-file fa-fw"></i> Documents</a></li>
+                        <?php $breads = explode('/', substr($path, strlen($base_dir))); ?>
+                        <?php foreach ($breads as $bread) : ?>
+                            <li><?php echo $bread; ?></li>
+                        <?php endforeach; ?>
                     </ol>
                 
                     <?php if (Session::has('action') && Session::get('action') == 'create_dir') : ?>

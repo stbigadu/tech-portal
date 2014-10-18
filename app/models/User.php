@@ -190,6 +190,15 @@ class User extends \Eloquent implements UserInterface, RemindableInterface
     }
     
     /**
+     * Attribute: is user a volunteer?
+     * @return boolean
+     */
+    public function getIsVolunteerAttribute()
+    {
+        return ($this->role->title == "Bénévole") ? true : false;
+    }
+    
+    /**
      * Attribute: is user a parent?
      * @return boolean
      */
